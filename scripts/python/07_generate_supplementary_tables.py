@@ -1,3 +1,26 @@
+# =============================================================================
+# [DEPRECATED 2026-09-18] DO NOT RE-RUN FOR SUBMISSION / 勿用于投稿重跑
+#
+# The DN cross-population rows hard-coded below (resource "UK Biobank DN" /
+# "UKB (direction consistent)"; Z = +0.50 / +0.45 / +0.38 / +0.20; RNH1 +3.59)
+# are NOT reproducible from any traceable source and have been REMOVED from the
+# manuscript.  No UK Biobank DN dataset exists in this project, and the only
+# public DN resources are GCST90018612 (BBJ) and GCST90018832 (BBJ|UKB|FinnGen),
+# both Sakaue et al. 2021, Nat Genet 53:1415-1424, PMID 34594039.
+#
+# Verified recomputation -- official MetaXcan v0.8.1, eQTLGen whole-blood model
+# (db_A.db + cov_A.txt.gz), GWAS = ebi-a-GCST90018832 (DN):
+#     RNH1 -0.83 (P=0.41) | CKAP4 -0.86 (P=0.39) | HSP90AB1 -0.90 (P=0.37)
+#     RPS14 +1.27 (P=0.21) | EEF2  -0.46 (P=0.65)      all P > 0.2
+# Pipeline control (FinnGen R13 DR x eQTLGen) reproduced SI Table S17 exactly
+# (RNH1 +2.30914 vs +2.3064; CKAP4 +0.98738 vs +0.9874; HSP90AB1 -0.53486 vs
+#  -0.5349; RPS14 +0.28111 vs +0.2811; EEF2 +0.20568 vs +0.2057).
+#
+# Authoritative current values and full provenance:
+#     BMC Genomics投稿资料\定稿资料\TableS9_复算结论_20260918.md
+#     BMC Genomics投稿资料\定稿资料\TableS9_复算_20260918\
+# =============================================================================
+
 """
 Generate Supplementary Tables S4, S5, S6
 """

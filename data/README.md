@@ -64,7 +64,7 @@ This dataset contains processed S-PrediXcan TWAS results comparing two eQTL weig
 | eQTLGen | https://www.eqtlgen.org/ |
 | 1000 Genomes EUR LD | https://www.internationalgenome.org/ |
 | UK Biobank DR (GCST90043640) | https://gwas.mrcieu.ac.uk/ |
-| Xue et al. 2022 DR | https://gwas.mrcieu.ac.uk/ |
+| Xue et al. 2022 DR | ⚠️ **Not resolvable** — the cited ID (`ieu-b-4803`) is absent from IEU OpenGWAS (verified 2026-09-16); the publication's real DR subset (GCST90134546, 1,652 cases / 60,577 controls) has no public summary statistics on the GWAS Catalog FTP. See `analysis_reports/数据集编号溯源_Xue2022_ieu-b-4803.md`. |
 | Sakaue et al. 2021 DN | https://gwas.mrcieu.ac.uk/ |
 
 ### Analysis Code

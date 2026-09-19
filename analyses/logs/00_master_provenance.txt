@@ -35,9 +35,22 @@ Key analyses:
 2.1 FinnGen R13 GWAS
   - URL: https://finngen.gitbook.io/finngen-library/documentation/data-releases
   - Release: R13
-  - DR:      N_case=15,353, N_control=398,626
-  - DN:      N_case=6,043,  N_control=396,166
-  - DPN:     N_case=4,145,  N_control=393,402
+  - DR:      N_case=15,353, N_control=62,519
+  - DN:      N_case=6,043,  N_control=97,506
+  - DPN:     N_case=4,145,  N_control=99,346
+  - [2026-09-16] CORRECTED: the control counts first recorded above
+    (398,626 / 396,166 / 393,402) were transcription errors inherited
+    from an early scratch script and match no endpoint in the R13
+    manifest (2,754 endpoints checked). The values now given are the
+    R13 manifest entries for these three endpoints and were
+    independently reproduced from the af_alt_cases / af_alt_controls
+    fields of the downloaded summary statistics. Case counts were
+    correct as originally recorded.
+    Consequence: N_e for the FinnGen R13 DR cohort is
+    4*15353*62519/77872 = 49,304, not the previously reported 59,134.
+    The sqrt(N_e)-weighted RNH1 DR sensitivity merge is therefore
+    +9.88 (P = 5.1e-23), not +10.28 (see
+    scripts/python/m6_ne_weighted_sensitivity.py).
   - Format: GWAS summary statistics (Z-score / P-value / OR)
   - Downloaded: 2026-05 (exact date varies by phenotype)
 
@@ -161,7 +174,6 @@ Output files (in data/processed/):
   - covariate_matrix.csv
   - mahalanobis_matched_pairs.csv
   - enrichment_comparison.csv
-  - matched_enrichment_results.csv
   - candidate_comparison_DR.csv
   - viz_z_distribution.csv
   - layer_analysis.csv

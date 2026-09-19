@@ -1,3 +1,19 @@
+################################################################################
+# ⚠️  SUPERSEDED — 本日志属于已被取代的分析世代（2026-06-27, MatchIt 4.5.0）
+#
+# 对照池 = 全基因组背景基因；本日志记载的是当时的探索性结果。
+# 现稿（submitted manuscript）采用的是 harmonized 重分析：
+#   MatchIt 4.5.5，对照池 = 44 个高置信非候选基因，
+#   且 eQTLGen 下候选组 *确有* FDR 富集（38/72 = 52.8%），
+#   匹配对照 19/54 = 35.2%（组内 FDR 调用），Fisher P = 0.070。
+# 因此下方 "Key finding" 中的 "candidate group remained at 0%" 与
+# "The disappearance of candidate enrichment ..." 均为 *历史记录*，
+# 不代表当前结果，请勿据此复算或引用。
+#
+# 2026-09-15：本日志引用的哨兵文件 data/processed/matched_enrichment_results.csv
+#             （4 字节空文件）已作为该旧世代的遗留物移除，三处指针已同步。
+################################################################################
+
 ========================================================================
 MAHALANOBIS MATCHING LOG (R matchit)
 ========================================================================
@@ -96,6 +112,9 @@ After matching, the enrichment analysis was repeated on the matched set:
 Result file: data/processed/matched_enrichment_results.csv
   (4 bytes - indicates no FDR-significant genes in candidate group
    under eQTLGen, making Fisher's exact test incalculable)
+  [2026-09-15] This file has been REMOVED as a leftover of the superseded
+  analysis era. The current, harmonized analysis reports candidate FDR
+  enrichment of 38/72 (52.8%) under eQTLGen - see manuscript section 3.4.
 
 Key finding:
   The disappearance of candidate enrichment under eQTLGen weights is NOT

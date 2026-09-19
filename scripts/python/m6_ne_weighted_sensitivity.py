@@ -22,12 +22,15 @@ Stouffer combination of the Z-scores with weights sqrt(N_e,i):
 Cochran's Q is evaluated on the b scale:  Q = sum_i N_e,i * (b_i - b_hat)^2.
 Random effects use the DerSimonian-Laird moment estimator for tau^2 on the b scale.
 
-Inputs (all previously published in the manuscript / archived outputs)
-----------------------------------------------------------------------
-  FinnGen R13 DR   : Z = +13.318 (eQTLGen weights; data/processed/eqtlgen_spredixcan_harmonized_results.csv), N_e = 59,134
-  UKB ieu-b-4803   : Z = +0.95  (eQTLGen weights; Xue et al. 2022),          N_e = 54,209 = 4*14147*322390/336537
-  UKB GCST90043640 : Z = +0.57  (GTEx v8 MASHR Nerve_Tibial weights),        N_e =  1,231 = 4*308*456040/456348
-                     (excluded from the primary estimate; underpowered, different weight source)
+Inputs (all from archived official MetaXcan v0.8.1 outputs)
+---------------------------------------------------------
+  FinnGen R13 DR   : Z = +2.3091 (eQTLGen weights; data/processed/ukb_dr_official/finngen_r13_dr_eqtlgen_official.csv),
+                     N_e = 49,304 = 4*15353*62519/77872
+  UKB GCST90043640 : Z = +0.7225 (eQTLGen weights; data/processed/ukb_dr_official/ukb_gcst90043640_eqtlgen_official.csv),
+                     N_e =  1,231 = 4*308*456040/456348
+  UKB ieu-b-4803   : RETRACTED (2026-09-16). The dataset ID is absent from IEU OpenGWAS (audited against the
+                     full 50,057-dataset catalogue) and its formerly carried Z = +0.95 had no traceable data
+                     or code. It is retained below only as a labelled reference, never as an input.
 
 Outputs
 -------
@@ -36,9 +39,9 @@ Outputs
 import math
 
 STUDIES = [
-    ("FinnGen R13 DR (eQTLGen weights)", 13.318, 59134),
-    ("UKB ieu-b-4803 (eQTLGen weights)", 0.95, 54209),
-    ("UKB GCST90043640 (GTEx v8 MASHR Nerve_Tibial weights)", 0.57, 1231),
+    ("FinnGen R13 DR (eQTLGen weights, official MetaXcan v0.8.1)", 2.3091, 49304),
+    ("UKB GCST90043640 (eQTLGen weights, official MetaXcan v0.8.1)", 0.7225, 1231),
+    ("UKB ieu-b-4803 (RETRACTED - dataset ID not resolvable in IEU OpenGWAS)", 0.95, 54209),
 ]
 
 
@@ -97,19 +100,26 @@ def report(label, zs, nes):
 
 def main():
     lines = []
-    # M6(b): primary k=2 set (FinnGen + ieu-b-4803), sqrt(N_e)-weighted re-merge
+    z_all = [s[1] for s in STUDIES]
+    ne_all = [s[2] for s in STUDIES]
+    # M6(b): primary k=2 set (FinnGen + GCST90043640, both eQTLGen weights), sqrt(N_e)-weighted re-merge
     lines += report("M6(b)  k=2 primary set, sqrt(N_e)-weighted re-merge",
-                    [13.318, 0.95], [59134, 54209])
-    # M6(d): descriptive k=3 merge including GCST90043640
-    lines += report("M6(d)  k=3 all-studies merge incl. GCST90043640",
-                    [13.318, 0.95, 0.57], [59134, 54209, 1231])
+                    z_all[:2], ne_all[:2])
+    # M6(d): reference merge that retains the retracted ieu-b-4803 value (completeness only; NOT an estimate)
+    lines += report("M6(d)  reference merge retaining the retracted ieu-b-4803 value (not an estimate)",
+                    z_all, ne_all)
     # unweighted k=3 reference
-    zs = [13.318, 0.95, 0.57]
-    m3 = sum(zs) / 3
-    Q3 = sum((z - m3) ** 2 for z in zs)
+    m3 = sum(z_all) / 3
+    Q3 = sum((z - m3) ** 2 for z in z_all)
+    I2_3 = max(0.0, (Q3 - 2) / Q3) * 100 if Q3 > 0 else 0.0
     lines += ["=" * 78,
-              "REFERENCE  k=3 unweighted mean: Z = %+.2f ; Q = %.1f (df=2) ; I^2 = %.1f%%"
-              % (m3, Q3, (Q3 - 2) / Q3 * 100)]
+              "REFERENCE  k=3 unweighted mean (retains the retracted value): Z = %+.2f ; Q = %.1f (df=2) ; I^2 = %.1f%%"
+              % (m3, Q3, I2_3),
+              "",
+              "The primary k = 2 set is FinnGen R13 DR + UKB GCST90043640, both analysed with eQTLGen weights",
+              "using the unmodified official MetaXcan v0.8.1 binary (max|dZ| between the raw-allele and",
+              "pre-aligned input protocols = 0.003, from duplicate-rsID handling).",
+              "UKB ieu-b-4803 is withdrawn: the accession is not resolvable in IEU OpenGWAS."]
     text = "\n".join(lines) + "\n"
     print()
     import os

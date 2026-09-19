@@ -172,12 +172,12 @@ with open(f'{OUT_DIR}/TableS6_cross_population_replication.csv', 'w', newline=''
                      'Random-effects pooled (unweighted mean, SE = 6.18); descriptive at k = 2'])
     writer.writerow(['Heterogeneity', 'DR', 'Cochran Q = 76.5 (df = 1)', 'I² = 98.7%', '2.2e-18', '—',
                      'τ = 8.69; 95% PI [-13.77, +28.04] crosses zero'])
-    writer.writerow(['Sensitivity', 'DR', '√N_e-weighted re-merge (k = 2)', '+10.28', '8.9e-25', '—',
-                     'Weighted Stouffer, weights √(N_e,i); Q = 72.7, I² = 98.6% (m6_ne_weighted_sensitivity.py)'])
+    writer.writerow(['Sensitivity', 'DR', '√N_e-weighted re-merge (k = 2)', '+9.88', '5.1e-23', '—',
+                     'Weighted Stouffer, weights √(N_e,i); Q = 80.7, I² = 98.8% (m6_ne_weighted_sensitivity.py)'])
     writer.writerow(['Sensitivity', 'DR', 'Three-study incl. GCST90043640 (k = 3, unweighted)', '+4.95', '—', '—',
                      'Q = 105.2, I² = 98.1%; mixes weight sources; completeness only'])
-    writer.writerow(['Sensitivity', 'DR', 'Three-study incl. GCST90043640 (k = 3, √N_e-weighted)', '+10.28', '8.6e-25', '—',
-                     'Q = 72.9, I² = 97.3%; mixes weight sources; completeness only'])
+    writer.writerow(['Sensitivity', 'DR', 'Three-study incl. GCST90043640 (k = 3, √N_e-weighted)', '+9.88', '5.0e-23', '—',
+                     'Q = 80.9, I² = 97.5%; mixes weight sources; completeness only'])
     writer.writerow(['Direction Consistency', 'DR', '8 testable genes', '87.5% (7/8)', 'P = 0.070',
                      'Two-sided exact binomial', 'Group-level direction check (GTEx v8 MASHR weights, Table S5b)'])
 

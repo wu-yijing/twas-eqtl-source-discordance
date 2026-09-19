@@ -1,4 +1,4 @@
-# TWAS eQTL Source Confounding — Systematic Evaluation
+# TWAS eQTL Weight-Source Discordance — Two-Axis Dual-Source Audit
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21238202.svg)](https://doi.org/10.5281/zenodo.21238202)
@@ -7,17 +7,24 @@
 
 This repository contains analysis scripts and processed data for:
 
-**"eQTL weight-source choice destabilizes TWAS gene prioritization: a dual-source sensitivity analysis in diabetic complications, calibrated with disease-agnostic controls"**
+**"Conventional TWAS endpoints cannot quantify the effect of eQTL weight-source choice on gene candidacy: a two-axis dual-source audit with disease-agnostic calibration and a genome-wide benchmark"**
 
 Status: code & data release accompanying the manuscript (BMC Genomics submission).
+
+> **Repository renamed on 2026-09-19** from `TWAS-eQTL-source-confounding` to `twas-eqtl-source-discordance`, to match the terminology adopted in the current manuscript. GitHub redirects the old name; the Zenodo archive, its concept DOI and all earlier release tags are unaffected. Update any existing clone with
+> `git remote set-url origin git@github.com:wu-yijing/twas-eqtl-source-discordance.git`.
 
 > The original v1.0.0 release (Zenodo [10.5281/zenodo.21428347](https://doi.org/10.5281/zenodo.21428347)) corresponded to the iScience submission titled *"eQTL source confounding systematically biases TWAS cross-population replication …"* (HOTAIR binding proteins, 104 genes, three diabetic complications). The archive now resolves through the concept DOI [10.5281/zenodo.21238202](https://doi.org/10.5281/zenodo.21238202), which always points to the latest version; the current version is v2.5.0 ([10.5281/zenodo.22752073](https://doi.org/10.5281/zenodo.22752073)), which adds the harmonized eQTLGen recompute (three-way allele harmonization), the Fig. S4 model-SNP-count panel on that recompute, and the resolved provenance of the dual-mismatch arm (GTEx multi-tissue Stouffer weighted-Z, not ACAT-O).
 
 ### Core Question
 
-Does the choice of eQTL weight source (GTEx v8 tissue-specific vs. eQTLGen large-scale whole blood) systematically alter TWAS cross-population replication conclusions?
+By how much does the choice of eQTL weight source (GTEx v8 tissue-specific vs. eQTLGen large-scale whole blood) perturb the conclusions a TWAS actually reports — Z-score sign, candidate gene rank and FDR gene candidacy — and how much of that perturbation is attributable to the resource/sample-size axis rather than the tissue-context axis?
+
+> **Terminology:** throughout this repository and the current manuscript, *eQTL-source discordance* denotes the systematic perturbation of TWAS gene-candidacy conclusions induced by the weight source when GWAS input and analytic pipeline are held fixed. It is operational and **not** a claim of confounding in the causal sense — the earlier releases of this archive were described with the latter term, which the manuscript no longer uses.
 
 ### Key Findings
+
+> ⚠️ **Version note (2026-09-19).** The headline numbers in the table below predate the official-MetaXcan Z recompute now archived here (`data/processed_officialZ/`, added 2026-09-19). They describe the **v2.5.0 generation**; the recomputed figures for the current manuscript will be folded in with the next release. Until then treat `data/processed_officialZ/_PROVENANCE.json` and the files it records as authoritative for Z-scores, direction consistency and cross-cohort heterogeneity.
 
 > **Note (2026-09-09, harmonized recompute):** The table below reflects the **current manuscript version (BMC Genomics submission)**, in which all eQTLGen-arm values were recomputed after **three-way allele harmonization** (eQTLGen assessed/other alleles ↔ FinnGen R13 ref/alt ↔ 1000G EUR A2) using the official eQTLGen FDR < 0.05 weight catalogue. This supersedes both the v1.0.0 (iScience) pipeline values and the earlier archived eQTLGen export, which contained an allele-alignment defect (24.1% of Z-scores flipped sign after harmonization). FDR enrichment rates are computed by Benjamini–Hochberg correction within each group × phenotype × source stratum; 37 of the 104 testbed genes have no eQTLGen model in the official FDR < 0.05 catalogue and are disclosed in the manuscript Methods; of the 67 that do, 61 return a valid S-PrediXcan statistic and form the eQTLGen arm (Additional file 1: Table S10). See `data/processed/eqtlgen_spredixcan_harmonized_results.csv` (gene-level Z-scores) and `data/processed/enrichment_comparison_harmonized.csv` (stratum-wise enrichment rates with Clopper–Pearson CIs).
 
@@ -31,7 +38,7 @@ Does the choice of eQTL weight source (GTEx v8 tissue-specific vs. eQTLGen large
 | eQTLGen FDR rate (candidate, DR) | 41.7% (10/24) | Harmonized recompute; group rates 41.7–66.7% across phenotypes, comparable to non-candidate and T2DM controls |
 | RNH1 GTEx Z-score (DR, Nerve_Tibial) | +13.82 | S-PrediXcan; from sparse 3-SNP MASHR model |
 | RNH1 eQTLGen Z-score (DR) | +13.32 | Harmonized recompute; source-stable signal |
-| Cross-population heterogeneity (RNH1, DR; FinnGen R13 vs UK Biobank) | I² = 98.7% | Random-effects pooled Z = +7.13, 95% prediction interval −13.77 to +28.04 (spans zero) |
+| Cross-cohort heterogeneity (RNH1, DR; FinnGen R13 vs UKB GCST90043640, both eQTLGen weights) | I² = 20.5% | Random-effects pooled Z = +1.52 (SE 0.79; P = 0.056), 95% prediction interval −0.33 to +3.36 (spans zero). Both cohorts direction-consistent (+2.31 and +0.72). Computed with the unmodified official MetaXcan v0.8.1 binary; √N_e-weighted re-merge gives Z = +2.39, Q = 0.13, I² = 0%. The former second cohort `ieu-b-4803` was withdrawn on 2026-09-16 (accession not resolvable in IEU OpenGWAS). |
 | SCZ replication (n=2,511 pairs) | 68.3% direction consistency | Axis difference not significant (bootstrap P = 0.530) |
 
 ## SCZ 2×2 Decomposition Replication (added in v2.0.0)
@@ -116,7 +123,7 @@ docker run --rm \
 ```
 
 ```
-TWAS-eQTL-source-confounding/
+twas-eqtl-source-discordance/
 ├── scripts/
 │   ├── python/
 │   │   ├── 01_visualize_mahalanobis_love_plot.py    # Love plot (covariate balance)
@@ -152,7 +159,6 @@ TWAS-eQTL-source-confounding/
 │       ├── eqtlgen_spredixcan_harmonized_results.csv  # eQTLGen TWAS results, three-way allele-harmonized recompute (current manuscript)
 │       ├── enrichment_comparison_harmonized.csv       # Stratum-wise enrichment rates (harmonized), Clopper–Pearson CIs
 │       ├── mahalanobis_matched_pairs.csv              # Mahalanobis matching pairs
-│       ├── matched_enrichment_results.csv             # Post-matching enrichment
 │       ├── enrichment_comparison.csv                  # Enrichment by group × phenotype × eQTL
 │       ├── covariate_matrix.csv                       # Gene-level covariates
 │       ├── layer_analysis.csv                         # Pull-down vs literature stratification
@@ -222,7 +228,7 @@ All GWAS and eQTL summary statistics used in this study are from **publicly avai
 | eQTLGen whole blood cis-eQTL | [eQTLGen](https://www.eqtlgen.org/) | Public access |
 | 1000 Genomes EUR LD | [1000 Genomes](https://www.internationalgenome.org/) | Public access |
 | UK Biobank DR (GCST90043640) | [IEU OpenGWAS](https://gwas.mrcieu.ac.uk/) | Public access |
-| UK Biobank DR (Xue et al. 2022; ieu-b-4803, 14,147 cases/322,390 controls) | [IEU OpenGWAS](https://gwas.mrcieu.ac.uk/) | Public access |
+| ~~UK Biobank DR (Xue et al. 2022; ieu-b-4803, 14,147 cases/322,390 controls)~~ | ⚠️ **Withdrawn 2026-09-16** — this accession is not present in IEU OpenGWAS (verified against the full 50,057-dataset catalogue; the neighbouring IDs `ieu-b-4795`–`ieu-b-4807` are likewise absent), and no local or repository copy exists; the Z value formerly attributed to it had no traceable data or code. The real DR subset of that publication (PMID 35841873) is GCST90134546 (1,652 cases / 60,577 controls) and has no public summary statistics. **Replaced by the already-used UKB DR dataset GCST90043640 (308 cases / 456,040 controls, re-analysed with eQTLGen weights).** See `analysis_reports/数据集编号溯源_Xue2022_ieu-b-4803.md`. |
 | Cai et al. 2026 UKB T2D-DR | (in preparation) | Apply to UKB |
 | Sakaue et al. 2021 DN (ebi-a-GCST90018832) | [IEU OpenGWAS](https://gwas.mrcieu.ac.uk/) | Public access |
 
@@ -265,6 +271,8 @@ All processed data tables are provided in `data/processed/` and `scz_replication
 Wu Y, Chen M, Wu Q, Zhao J, Jin G. (2026). TWAS eQTL Source Confounding — Systematic Evaluation (v1.0.0). Zenodo. [https://doi.org/10.5281/zenodo.21428347](https://doi.org/10.5281/zenodo.21428347)
 
 Wu Y. (2026). eQTL-source discordance in TWAS: a dual-source sensitivity analysis with true-negative calibration (code & data) (v2.4.0). Zenodo. [https://doi.org/10.5281/zenodo.22691102](https://doi.org/10.5281/zenodo.22691102)
+
+Wu Y, Chen M, Wu Q, Zhao J, Jin G. (2026). TWAS eQTL weight-source discordance — two-axis dual-source audit (v2.6.0). Zenodo. Concept DOI [https://doi.org/10.5281/zenodo.21238202](https://doi.org/10.5281/zenodo.21238202) — *to be added once the corresponding Zenodo release is published (it always resolves to the latest version).*
 
 ## License
 

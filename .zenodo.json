@@ -21,18 +21,23 @@
             "affiliation": "Department of Endocrinology, The First Affiliated Hospital of Bengbu Medical University, No. 287 Changhuai Road, Bengbu 233004, Anhui Province, China"
         }
     ],
-    "title": "TWAS eQTL Source Confounding — Systematic Evaluation",
-    "description": "Analysis scripts, processed data, and containerized reproducibility environment for: eQTL source selection systematically biases TWAS cross-population replication — quantitative evidence from HOTAIR binding proteins across 104 genes and three diabetic complications.",
+    "title": "TWAS eQTL weight-source discordance: a two-axis dual-source audit (code and data)",
+    "description": "Analysis scripts, processed data and containerized reproducibility environment for: \"Conventional TWAS endpoints cannot quantify the effect of eQTL weight-source choice on gene candidacy: a two-axis dual-source audit with disease-agnostic calibration and a genome-wide benchmark\" (BMC Genomics submission). eQTL-source discordance denotes here the systematic perturbation of TWAS gene-candidacy conclusions (Z-score sign, candidate rank and FDR candidacy) induced by the eQTL weight source when the GWAS input and analytic pipeline are held fixed; it is operational and not a claim of causal confounding. The archive decomposes that perturbation into a resource/sample-size axis and a tissue-context axis, calibrates it against disease-agnostic controls on a 104-gene HOTAIR-interactome testbed across three Finnish diabetic complications (FinnGen R13), and benchmarks it genome-wide in PGC3 schizophrenia. All headline Z-scores are recomputed with the unmodified official MetaXcan v0.8.1 binary after three-way allele harmonization.",
     "license": "MIT",
     "keywords": [
         "TWAS",
-        "eQTL",
-        "cross-population replication",
+        "eQTL weight-source dependence",
+        "endpoint calibration",
+        "disease-agnostic control",
+        "two-axis decomposition",
+        "genome-wide calibration",
+        "cross-cohort replication",
         "transcriptome-wide association study",
-        "HOTAIR",
         "diabetic complications",
+        "schizophrenia",
         "reproducibility",
         "S-PrediXcan",
+        "MetaXcan",
         "GTEx",
         "eQTLGen"
     ],
@@ -46,10 +51,15 @@
     "related_identifiers": [
         {
             "scheme": "url",
-            "identifier": "https://github.com/wu-yijing/TWAS-eQTL-source-confounding",
+            "identifier": "https://github.com/wu-yijing/twas-eqtl-source-discordance",
             "relation": "isSupplementTo"
+        },
+        {
+            "scheme": "doi",
+            "identifier": "10.5281/zenodo.21238202",
+            "relation": "isNewVersionOf"
         }
     ],
-    "version": "1.0.0",
+    "version": "2.6.0",
     "language": "eng"
 }

@@ -1,5 +1,5 @@
 """Generate SCZ replication Figure 9 (2x2 decomposition scatters) + JSON-backed summary.
-Reads scz_replication/_rdat_tmp/scz_twas_results_limit0.csv and scz_decomp_limit0.json
+Reads _DEPRECATED_scz_self_implemented/_rdat_tmp/scz_twas_results_limit0.csv and scz_decomp_limit0.json
 produced by scz_twas.py (full run). Overwrites submission_iScience_v2/figures/Figure9.* """
 import csv, json, os
 import numpy as np
@@ -7,7 +7,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-HERE = "scz_replication/_rdat_tmp"
+HERE = "_DEPRECATED_scz_self_implemented/_rdat_tmp"
 RES  = os.path.join(HERE, "scz_twas_results_limit0.csv")
 DECOMP = os.path.join(HERE, "scz_decomp_limit0.json")
 OUTDIR = "submission_iScience_v2/figures"

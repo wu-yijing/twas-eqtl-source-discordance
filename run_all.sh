@@ -1,6 +1,6 @@
 #!/bin/bash
 # =============================================================================
-# run_all.sh — TWAS eQTL Source Confounding 完整复现入口
+# run_all.sh — eQTL-source discordance in TWAS 完整复现入口
 # =============================================================================
 # 此脚本在 Docker 容器内自动执行，也可在本地 Conda 环境下使用。
 #
@@ -26,7 +26,7 @@ TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 mkdir -p "${OUTPUT_DIR}" "${LOG_DIR}"
 
 echo "====================================================================="
-echo " TWAS eQTL Source Confounding — Reproducibility Pipeline"
+echo " eQTL-source discordance in TWAS — Reproducibility Pipeline"
 echo "====================================================================="
 echo " Start time: $(date)"
 echo " Working dir: ${SCRIPT_DIR}"

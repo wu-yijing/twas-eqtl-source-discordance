@@ -50,7 +50,7 @@ hk = rho_ci(h.z_Whole_Blood, h.z_Nerve_Tibial)
 print('Housekeeping   : %d 基因 / %d 对  rho=%+.4f CI[%+.3f,%+.3f]' % (h.gene.nunique(), hk[3], hk[0], hk[1], hk[2]))
 
 # ---------- 3. PGC3 SCZ genome-wide ----------
-scz = pd.read_csv(os.path.join(R, 'scz_replication', 'results', 'scz_twas_results_limit0.csv')).dropna(subset=['wbZ', 'ntZ'])
+scz = pd.read_csv(os.path.join(R, '_DEPRECATED_scz_self_implemented', 'results', 'scz_twas_results_limit0.csv')).dropna(subset=['wbZ', 'ntZ'])
 sc = rho_ci(scz.wbZ, scz.ntZ)
 print('PGC3 SCZ       : %d 对  rho=%+.4f CI[%+.3f,%+.3f]' % (sc[3], sc[0], sc[1], sc[2]))
 

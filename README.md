@@ -7,14 +7,14 @@
 
 This repository contains analysis scripts and processed data for:
 
-**"Conventional TWAS endpoints cannot quantify the effect of eQTL weight-source choice on gene candidacy: a two-axis dual-source audit with disease-agnostic calibration and a genome-wide benchmark"**
+**"eQTL weight-source choice reshapes TWAS gene candidacy: a two-axis dual-source audit with disease-agnostic calibration and a genome-wide benchmark"**
 
 Status: code & data release accompanying the manuscript (BMC Genomics submission).
 
 > **Repository renamed on 2026-09-19** from `TWAS-eQTL-source-confounding` to `twas-eqtl-source-discordance`, to match the terminology adopted in the current manuscript. GitHub redirects the old name; the Zenodo archive, its concept DOI and all earlier release tags are unaffected. Update any existing clone with
 > `git remote set-url origin git@github.com:wu-yijing/twas-eqtl-source-discordance.git`.
 
-> The original v1.0.0 release (Zenodo [10.5281/zenodo.21428347](https://doi.org/10.5281/zenodo.21428347)) corresponded to the iScience submission titled *"eQTL source confounding systematically biases TWAS cross-population replication …"* (HOTAIR binding proteins, 104 genes, three diabetic complications). The archive now resolves through the concept DOI [10.5281/zenodo.21238202](https://doi.org/10.5281/zenodo.21238202), which always points to the latest version; the current version is **v2.7.0** ([10.5281/zenodo.22856712](https://doi.org/10.5281/zenodo.22856712), 2026-09-20), which ships the complete finalized figure set (FigS1–FigS6; v2.6.0 carried FigS1 only) alongside the reproducible `figure_scripts_officialZ_20260917/` pipeline, and builds on v2.5.0 (harmonized eQTLGen recompute, the Fig. S4 model-SNP-count panel, and the resolved provenance of the dual-mismatch arm as GTEx multi-tissue Stouffer weighted-Z rather than ACAT-O).
+> The original v1.0.0 release (Zenodo [10.5281/zenodo.21428347](https://doi.org/10.5281/zenodo.21428347)) corresponded to the iScience submission titled *"eQTL source confounding systematically biases TWAS cross-population replication …"* (HOTAIR binding proteins, 104 genes, three diabetic complications). The archive now resolves through the concept DOI [10.5281/zenodo.21238202](https://doi.org/10.5281/zenodo.21238202), which always points to the latest version; the current version is **v2.7.0** ([10.5281/zenodo.22856712](https://doi.org/10.5281/zenodo.22856712), 2026-09-20), which ships the complete finalized figure set (FigS1–FigS6; v2.6.0 carried FigS1 only) alongside the reproducible `figure_scripts_officialZ_20260917/` pipeline, and builds on v2.5.0 (harmonized eQTLGen recompute, the Fig. S4 model-SNP-count panel, and the then-current attribution of the dual-mismatch arm to GTEx multi-tissue Stouffer weighted-Z — since superseded: every current GTEx multi-tissue statistic, that arm included, uses the numerically stable multi-tissue ACAT-O combination, see Key Findings).
 
 ### Core Question
 
@@ -36,12 +36,13 @@ input/output paths, and override with `TWAS_REPO` / `TWAS_DATA_Z` / `FIG_OUT_MAI
 `AF1_DOCX` / `FIG_RESULTS`. **Additional file 1 is not distributed with this repository** (it is the
 journal's supplementary file); download it and point `AF1_DOCX` at it. See that directory's `README.md`.
 
-Two directories are **superseded and kept only for audit** — do not use them to reproduce the paper:
+Three directories are **superseded and kept only for audit** — do not use them to reproduce the paper:
 
 | Directory | Why deprecated |
 |---|---|
 | `_DEPRECATED_figure_scripts_pre20260917/` | The five data-driven scripts of the 2026-09-14 generation. They read the **pre-correction** data layer `data/processed/` (missing the σᵢ expression-variance factor and with a PLINK 2-bit decoding defect), so they reproduce *retired* values — e.g. RNH1 DR Z = 13.318 vs 2.3064, TUBB = 48.516 vs 11.8932, CKAP4 = 4.7549 vs 0.9874 (×4–×6). |
 | `_DEPRECATED_supplementary_old_numbering/` | The pre-2026-09-15 supplementary-figure scheme (`FigureS1–FigureS8`), which does **not** correspond to the current Additional file 1 (Fig. S1–S6). Superseded by `figures/FigS1–FigS6`. |
+| `_DEPRECATED_scz_self_implemented/` | The **in-house** SCZ TWAS estimator (Z = (w′R⁻¹z)/√(w′R⁻¹w)), renamed from `scz_replication/` on 2026-09-20. Its JSON/CSV results are the pre-correction snapshot (n = 2,511), not the manuscript's values; the current SCZ statistics come from the official MetaXcan v0.8.1 binary. See `_DEPRECATED_scz_self_implemented/README_DEPRECATED.md`. |
 
 ### Key Findings
 
@@ -68,7 +69,7 @@ Two directories are **superseded and kept only for audit** — do not use them t
 
 A dual-source 2×2 decomposition was applied to schizophrenia (SCZ, PGC3 wave3 European, 53,386 cases / 77,258 controls) to test whether the source/panel vs tissue-context structure generalizes beyond the metabolic discovery cohort.
 
-- **Method**: the current SCZ statistics were recomputed with the **official MetaXcan v0.8.1 binary**, holding the eQTL weights, tissues, SNP filters and LD reference identical to the discovery analysis. The four-arm Z matrix is archived as `data/processed_officialZ/scz_z_4arm_official.csv`; the earlier self-implemented estimator (Z = (w′R⁻¹z)/√(w′R⁻¹w), LD from 1000G EUR, ridge 0.1) is retained under `scz_replication/` for provenance only.
+- **Method**: the current SCZ statistics were recomputed with the **official MetaXcan v0.8.1 binary**, holding the eQTL weights, tissues, SNP filters and LD reference identical to the discovery analysis. The four-arm Z matrix is archived as `data/processed_officialZ/scz_z_4arm_official.csv`; the earlier self-implemented estimator (Z = (w′R⁻¹z)/√(w′R⁻¹w), LD from 1000G EUR, ridge 0.1) is retained under `_DEPRECATED_scz_self_implemented/` for provenance only.
 - **Denominators (two are in use)**: a 10,357-gene pool with a valid model, of which 9,048 (87.4%) carry a GTEx Whole_Blood model and 8,890 a Z in **both** GTEx tissues. The four-arm decomposition requires a finite Z in all four arms and therefore rests on the **8,315-gene complete-case set (80.3% of the pool)**. The plotted tissue-axis estimate uses n = 8,890 and the decomposition n = 8,315; the two subsets agree to three decimals (ρ = 0.420).
 - **Results (complete-case n = 8,315)**:
   - Panel-only analogue (eQTLGen vs GTEx Whole_Blood): ρ = **+0.469**, 67.2% direction-consistent
@@ -77,9 +78,9 @@ A dual-source 2×2 decomposition was applied to schizophrenia (SCZ, PGC3 wave3 E
   - The three arms are indistinguishable on direction consistency (every pairwise gap ≤ 1.0 percentage point, against a binomial interval width of ≈±1 point), while on ρ the dual arm lies between the two single-axis arms — the ρ-based axis ordering is **trait-dependent**, not a fixed “source always dominates” rule.
   - Formal axis contrast: Δρ(dual − tissue) = +0.0265 (95% CI +0.0002 to +0.0524; bootstrap P = 0.048) and Δρ(dual − panel) = −0.0226 (95% CI −0.0355 to −0.0094; P = 0.0006). Measured against the post hoc 0.10 margin the axes are reported as **indistinguishable at this sample size**, not as equivalent (the margin is 3.8× the observed difference).
 - **Sparsity**: GTEx v8 MASHR models are sparse (median 2 model SNPs per gene, IQR 1–2) whereas the eQTLGen cis panel is dense, and the tissue-axis contrast is not framework-dependent (ρ = 0.525 under elastic net vs 0.499 under MASHR on the 4,098-gene four-way universe). Stratifying the SCZ contrast by GTEx model size does not establish sparsity as a sufficient explanation of the tissue axis (tissue-only minus dual, +0.54 percentage points, 95% CI −0.79 to +1.86, P = 0.43; Additional file 1: Table S15).
-- **⚠️ Archive note**: the JSONs in `scz_replication/results/` are the **earlier self-implemented-pipeline snapshot** (n = 2,511 complete-case; ρ = 0.522 for the source analogue and 0.509 for the tissue axis) and do **not** carry the current values — they are kept for provenance only. Authoritative current values: `data/processed_officialZ/scz_z_4arm_official.csv` together with Additional file 1 (Tables S15 and S16).
-- **Scripts**: `scz_replication/scz_twas.py` (TWAS + decomposition), `scz_replication/build_weights_db.py` (weight DB), `scz_replication/robustness_scz.py` (stratified robustness), `scz_replication/make_figure9_scz.py` + `scz_replication/make_robustness_fig.py` (figures).
-- **Figures**: the SCZ arm is not part of the current figure set (`figures/`). The two SCZ figure scripts (`make_figure9_scz.py`, `make_robustness_fig.py`) are iScience-era leftovers that write to `submission_iScience_v2/figures/` and `scz_replication/_rdat_tmp/` — neither path is tracked here. The machine-readable SCZ results are in `scz_replication/results/`.
+- **⚠️ Archive note**: the JSONs in `_DEPRECATED_scz_self_implemented/results/` are the **earlier self-implemented-pipeline snapshot** (n = 2,511 complete-case; ρ = 0.522 for the source analogue and 0.509 for the tissue axis) and do **not** carry the current values — they are kept for provenance only. Authoritative current values: `data/processed_officialZ/scz_z_4arm_official.csv` together with Additional file 1 (Tables S15 and S16).
+- **Scripts** (all superseded — kept for audit): `_DEPRECATED_scz_self_implemented/scz_twas.py` (in-house TWAS + decomposition), `build_weights_db.py` (weight DB), `robustness_scz.py` (sparsity-stratified robustness), `scz_axis_difference_analysis.py` + `scz_threshold_calibration.py`, and the iScience-era figure scripts `make_figure9_scz.py` / `make_robustness_fig.py`.
+- **Figures**: the SCZ arm is not part of the current figure set (`figures/`). The two SCZ figure scripts (`make_figure9_scz.py`, `make_robustness_fig.py`) are iScience-era leftovers that write to `submission_iScience_v2/figures/` and `_DEPRECATED_scz_self_implemented/_rdat_tmp/` — neither path is tracked here. The machine-readable SCZ results of the current manuscript are in `data/processed_officialZ/scz_z_4arm_official.csv`; the superseded snapshot is in `_DEPRECATED_scz_self_implemented/results/`.
 
 ## Quick Start (Docker — Recommended)
 
@@ -162,79 +163,101 @@ docker run --rm \
 │   │                               #   reads data/processed/, writes figs/; superseded by
 │   │                               #   figure_scripts_officialZ_20260917/ — see its README_DEPRECATED.md
 │   └── R/run_mahalanobis_matching.R
-├── scz_replication/                # genome-wide PGC3 SCZ 2×2 arm — code + results/ (JSON + per-gene CSV)
 ├── analyses/                       # control-layer scripts + logs/ (run provenance)
 ├── tables/                         # exported table CSVs
 ├── analysis_reports/               # dated audit notes (accession checks, provenance)
 │
 ├── _DEPRECATED_figure_scripts_pre20260917/   # the five 2026-09-14-generation figure scripts
-└── _DEPRECATED_supplementary_old_numbering/  # pre-2026-09-15 supplementary scheme (FigureS1–FigureS8)
+├── _DEPRECATED_supplementary_old_numbering/  # pre-2026-09-15 supplementary scheme (FigureS1–FigureS8)
+└── _DEPRECATED_scz_self_implemented/         # in-house SCZ TWAS estimator (superseded by official MetaXcan v0.8.1)
 ```
 
 **Which part is current.** The paper's figures are `figures/`, and the only pipeline that reproduces
 them is `figure_scripts_officialZ_20260917/` (start with `python paths_config.py`, which prints every
 input and output path). The Z-scores, denominators and cross-cohort values are authoritative in
 `data/processed_officialZ/`. Older generations are kept for provenance and marked
-`_DEPRECATED_…`, `scripts/python/` (early-generation figure pipeline) or `data/processed/`
+`_DEPRECATED_…`, `scripts/python/` (early-generation figure pipeline), `_DEPRECATED_scz_self_implemented/` (in-house SCZ TWAS estimator) or `data/processed/`
 (pre-correction intermediates) — none of them should be used to reproduce the paper.
 A directory named `figs/` is **not** part of the repository: `run_all.sh` creates it at run time as
 its figure output, then copies it (with logs and processed data) into `output/`. `docs/`,
 `manuscript/` and `figures/scz/`, which earlier versions of this README listed, do not exist.
 
 ## SCZ Replication Folder Layout
+The genome-wide SCZ arm’s code is **superseded and kept only for audit**, like the other
+`_DEPRECATED_*` directories. It implements the **in-house** TWAS estimator
+(`Z = (w′R⁻¹z)/√(w′R⁻¹w)`), whereas the current manuscript recomputes the SCZ statistics with the
+official MetaXcan v0.8.1 binary. See `_DEPRECATED_scz_self_implemented/README_DEPRECATED.md`.
 
 ```
-scz_replication/
-├── scz_twas.py                  # TWAS Z + 2×2 decomposition (self-implemented)
-├── build_weights_db.py          # assemble eqtlgen / GTEx WB / GTEx NT weight DB
-├── robustness_scz.py           # sparsity-stratified robustness + bootstrap CI
-├── make_figure9_scz.py          # Fig9 source/tissue scatter
-├── make_robustness_fig.py       # FigS1 stratified bar chart
-├── patch_manuscript_scz.py      # manuscript write-back (SCZ section)
-├── patch_robustness.py          # manuscript write-back (limitation)
-└── results/
-    ├── scz_decomp_limit0.json  # decomposition ρ / n / concordance
-    ├── scz_robustness.json     # stratified robustness + CI
-    └── scz_twas_results_limit0.csv  # per-gene TWAS Z (10,357 genes)
+_DEPRECATED_scz_self_implemented/
+├── scz_twas.py, build_weights_db.py, robustness_scz.py   # TWAS Z + 2×2 decomposition, weight DB, robustness
+├── scz_axis_difference_analysis.py, scz_threshold_calibration.py
+├── hk_replication_analysis.py, make_fdr_ci_figures.py, make_replication_figure.py
+├── make_figure9_scz.py, make_robustness_fig.py           # iScience-era figures (output path not tracked)
+├── patch_manuscript_scz.py, patch_robustness.py          # manuscript write-back helpers
+└── results/                                              # superseded snapshot (n = 2,511; see the SCZ section)
+    ├── scz_decomp_limit0.json, scz_axis_difference.json
+    ├── scz_robustness.json, scz_threshold_calibration.json
+    └── scz_twas_results_limit0.csv                       # per-gene TWAS Z of that earlier run
 ```
-The manuscript, cover letter and Additional file 1 are **not** part of this repository; the figure set that accompanies them is `figures/`. SCZ arm outputs: `scz_replication/results/` (pre-correction snapshot — current values are in `data/processed_officialZ/`).
+
+The manuscript, cover letter and Additional file 1 are **not** part of this repository; the figure set that accompanies them is `figures/`. The current SCZ Z-matrix and denominators are `data/processed_officialZ/scz_z_4arm_official.csv`.
 
 > Large intermediates (`weights.db`, extracted eQTLGen RDat weights, raw GWAS) are excluded by `.gitignore`; regenerate via the scripts above.
 
 ## Cluster-Robustness Re-analysis of Direction Consistency (S1)
 
-> ⚠️ **Pre-correction generation — the numbers in this section are superseded.** It describes the
-> v2.5.0-generation cluster-robustness run, which read `data/processed/` (the pre-correction Z layer)
-> and was written against an older manuscript draft. The **current** cluster-aware statistics are in
-> Additional file 1: Table S16 — naive t = 4.10 (df 94, P = 8.8 × 10⁻⁵); cluster-robust sandwich
-> SE = 0.125 (two-sided P = 0.004, df 31); delete-one-gene jackknife SE = 0.137 (two-sided P = 0.008);
-> gene-label permutation P < 0.001; gene-level cluster bootstrap (B = 10,000) giving ρ 95% CI 0.12–0.62
-> and direction consistency 58.3–79.2% — against the arm rates of Table 3a (68.8% overall, 66/96).
+> ⚠️ **Status (2026-09-20): this section has been rebuilt onto the corrected Z layer.** The
+> v2.5.0-generation run it previously described read `data/processed/` (pre-correction) and was
+> written against an older manuscript draft; its numbers are recorded in the traceability note at
+> the end of this section. The values below are the manuscript’s — Additional file 1: Table S16 for
+> the cluster-aware procedures and Table 3a for the arm rates.
+
+The primary between-source comparison comprises 96 gene–phenotype pairs that derive from only
+**32 genes** (three phenotypes each), so the pairs are not independent observations. All four
+cluster-aware procedures reported by the manuscript are computed on the rank correlation
+(ρ = 0.39 on the 96 pairs):
+
+| Procedure | Value |
+|---|---|
+| Naive t test on the rank correlation | t = 4.10 (df 94), P = 8.8 × 10⁻⁵ |
+| Cluster-robust sandwich standard error | SE = 0.125 — one-sided P = 0.002 (two-sided P = 0.004, df 31) |
+| Delete-one-gene jackknife standard error | SE = 0.137 — one-sided P = 0.004 (two-sided P = 0.008, df 31) |
+| Gene-label permutation (B = 10,000) | null 2.5–97.5 percentiles −0.22 to 0.23; P < 0.001 |
+| Gene-level cluster bootstrap (B = 10,000) | ρ 95% CI 0.12–0.62; direction consistency 95% CI 58.3–79.2% |
+
+Resampling detail: all four resampling procedures use B = 10,000 draws with **seed 20260915** (Additional file 1: Table S16, note). The seeds recorded in the traceability note below belong to the superseded generation.
+
+All four procedures keep the association significant, so the independent-pair naive test is not
+materially anti-conservative. The manuscript nevertheless reports the **gene-cluster bootstrap
+interval as the primary interval** for the direction-consistency rate (58.3–79.2%) rather than the
+independent-pair Clopper–Pearson interval (58.5–77.8%; Additional file 1: Table S20, min|Z| = 0),
+and reports the rate descriptively, because it is not separable from the within-arm empirical null
+(63.6%, 35/55).
+
+**Repo-level diagnostic — not reported in the manuscript.** Recomputing the one-way ICC of the
+per-gene concordance proportions on the current primary arm
+(`data/processed_officialZ/primary_arm_96pairs_official.csv`; 32 genes × 3 pairs) gives
+**ICC = 0.000** — the raw estimate is −0.004 before clipping at zero, i.e. between-gene variance
+does not exceed within-gene variance — and **design effect = 1.000**. Clustering of the binary
+concordance outcome within genes is therefore negligible. This is the same diagnostic the earlier
+generation reported, recomputed on the corrected Z layer; it is offered for reproducibility and is
+not part of the manuscript’s evidence.
+
+**Genome-wide SCZ arm.** With a single trait each gene contributes **exactly one comparison**
+(8,315 complete-case genes drawn from a 10,357-gene pool), so the design effect is 1 by construction
+and no cluster correction is required. The current arm correlations are ρ = +0.469 (panel-only),
++0.420 (tissue-only) and +0.447 (dual), with direction consistency 67.2 / 66.8 / 66.2%.
+
+> ⚠️ **Superseded numbers, recorded for traceability only — do not quote.** The v2.5.0-generation
+> run reported 61/96 = 63.5%, a naive exact binomial test of P = 0.010, ICC = 0.000 / design
+> effect = 1.000, sandwich P = 0.013, gene-level bootstrap P = 0.017 (95% CI 53.1–74.0%) and
+> permutation P = 0.008, at B = 10,000 with seeds `20260910` (HOTAIR arms) and `20260726` (SCZ arm);
+> for SCZ it reported 2,511 pairs from 2,511 genes with 68.26% / ρ = 0.522 and 71.21% / ρ = 0.509.
 > The current manuscript reports no exact binomial test against 50% for this arm and no ICC or
-> design-effect statement. This block and `scripts/python/s1_cluster_robustness/` are kept for
-> provenance only; rebuilding them from `data/processed_officialZ/` is a separate task.
-
-The primary between-source comparison comprises 96 gene–phenotype pairs that derive from
-only **32 genes**, so a gene's three phenotypes (DR, DN, DPN) are not independent
-observations. The `scripts/python/s1_cluster_robustness/` folder quantifies this clustering
-and recomputes the direction-consistency test with three cluster-aware procedures.
-
-**Result: the intra-gene correlation is negligible (ICC = 0.000, design effect = 1.000).**
-The exact binomial test reported in the manuscript (P = 0.010) is therefore **not materially
-anti-conservative** — a cluster-robust sandwich test gives P = 0.013, a gene-level cluster
-bootstrap gives P = 0.017 (95% CI 53.1–74.0%), and a gene-label permutation test gives
-P = 0.008. All variants remain significant at α = 0.05, and the CI widens by only 0.9
-percentage points (53.1–74.0% vs 53.1–73.1%).
-
-For the genome-wide SCZ arm the complete-case set contributes **exactly one pair per gene**
-(2,511 pairs from 2,511 genes), so the design effect is 1 by construction and no cluster
-correction is required; the gene-resampling bootstrap coincides with the exact binomial test
-(68.26%, ρ = 0.522 for the resource/sample-size axis; 71.21%, ρ = 0.509 for the
-tissue-context axis).
-
-Seeds: `20260910` (HOTAIR arms) and `20260726` (SCZ arm), B = 10,000 each.
-Full methods, reproduction steps and a stale-file caveat are in
-`scripts/python/s1_cluster_robustness/README.md`.
+> design-effect statement. `scripts/python/s1_cluster_robustness/` — including its `README.md` and
+> `s1_results.json` — still describes that generation; treat it as provenance for the deprecated
+> pipeline rather than as the current analysis.
 
 ## Data Sources
 
@@ -281,9 +304,9 @@ python scripts/python/02_density_scatter_consistency.py
 
 ## Reproducibility
 
-All processed data tables are provided in `data/processed/` and `scz_replication/results/`. Analysis scripts are version-controlled in this repository under MIT license. The repository snapshot is archived at Zenodo under the concept DOI [https://doi.org/10.5281/zenodo.21238202](https://doi.org/10.5281/zenodo.21238202), which always resolves to the latest version (current version v2.4.0, [10.5281/zenodo.22691102](https://doi.org/10.5281/zenodo.22691102)). The gene-level cluster-robustness re-analysis (S1) is archived both here (`scripts/python/s1_cluster_robustness/`) and in that Zenodo release as `s1_cluster_robustness.zip`. The sqrt(N_e)-weighted sensitivity re-merge of the RNH1 DR cross-cohort meta-analysis (M6(b)) and the descriptive three-study merge re-including GCST90043640 (M6(d)) are reproducible via `scripts/python/m6_ne_weighted_sensitivity.py` (output: `data/processed/m6_ne_weighted_sensitivity_results.txt`); the per-gene eQTLGen BH-FDR values underlying the DR rows of Table 1 are provided in `data/processed/eqtlgen_DR_pergene_FDR.csv`.
+The authoritative processed data tables are in `data/processed_officialZ/` (Z-scores, arm denominators, the four-arm SCZ matrix); the earlier `data/processed/` layer is retained only as pre-correction provenance, and the superseded SCZ snapshot sits in `_DEPRECATED_scz_self_implemented/results/`. Analysis scripts are version-controlled in this repository under MIT license. The repository snapshot is archived at Zenodo under the concept DOI [https://doi.org/10.5281/zenodo.21238202](https://doi.org/10.5281/zenodo.21238202), which always resolves to the latest version (current version **v2.7.0**, [10.5281/zenodo.22856712](https://doi.org/10.5281/zenodo.22856712)). The gene-level cluster-robustness re-analysis (S1) is archived here (`scripts/python/s1_cluster_robustness/`, which documents the **superseded** v2.5.0-generation run — see the S1 section); it is **not** bundled as a separate archive in the Zenodo release (v2.7.0 ships `figures/`, `tables/`, `figure_scripts/` and `split_half_simulation/`). The sqrt(N_e)-weighted sensitivity re-merge of the RNH1 DR cross-cohort meta-analysis (M6(b)) and the descriptive three-study merge re-including GCST90043640 (M6(d)) are reproducible via `scripts/python/m6_ne_weighted_sensitivity.py` (output: `data/processed/m6_ne_weighted_sensitivity_results.txt`); the per-gene eQTLGen Z, BH q and FDR calls underlying the group rows of Tables 1b and 2 are provided in `data/processed_officialZ/eqtlgen_official_Z.csv` (`BH_q` and `FDR_significant`; 96 genes × 3 phenotypes = 288 rows).
 
-> ⚠️ `data/processed/eqtlgen_vs_gtex_comparison.csv` is **superseded for direction-consistency analyses**: it predates the three-way allele harmonisation, so its `Same_Direction` column reflects pre-harmonisation Z-scores. Use `data/processed/eqtlgen_spredixcan_harmonized_results.csv` instead.
+> ⚠️ `data/processed/eqtlgen_vs_gtex_comparison.csv` is **superseded for direction-consistency analyses**: it predates the three-way allele harmonisation, so its `Same_Direction` column reflects pre-harmonisation Z-scores. Use `data/processed_officialZ/eqtlgen_official_Z.csv` instead.
 
 ## Citation
 
@@ -291,7 +314,7 @@ Wu Y, Chen M, Wu Q, Zhao J, Jin G. (2026). TWAS eQTL Source Confounding — Syst
 
 Wu Y. (2026). eQTL-source discordance in TWAS: a dual-source sensitivity analysis with true-negative calibration (code & data) (v2.4.0). Zenodo. [https://doi.org/10.5281/zenodo.22691102](https://doi.org/10.5281/zenodo.22691102)
 
-Wu Y, Chen M, Wu Q, Zhao J, Jin G. (2026). TWAS eQTL weight-source discordance — two-axis dual-source audit (v2.6.0). Zenodo. Concept DOI [https://doi.org/10.5281/zenodo.21238202](https://doi.org/10.5281/zenodo.21238202) — *to be added once the corresponding Zenodo release is published (it always resolves to the latest version).*
+Wu Y, Chen M, Wu Q, Zhao J, Jin G. (2026). eQTL weight-source choice reshapes TWAS gene candidacy: a two-axis dual-source audit with disease-agnostic calibration and a genome-wide benchmark (code & data) (v2.7.0). Zenodo. [https://doi.org/10.5281/zenodo.22856712](https://doi.org/10.5281/zenodo.22856712) — concept DOI [https://doi.org/10.5281/zenodo.21238202](https://doi.org/10.5281/zenodo.21238202) always resolves to the latest version.
 
 ## License
 

@@ -1,7 +1,7 @@
 import sqlite3, csv, gzip, os, sys
 
-OUT = "scz_replication/weights.db"
-EQ_CSV = "scz_replication/_rdat_tmp/eqtlgen_weights.csv.gz"
+OUT = "_DEPRECATED_scz_self_implemented/weights.db"
+EQ_CSV = "_DEPRECATED_scz_self_implemented/_rdat_tmp/eqtlgen_weights.csv.gz"
 WB_DB = r"E:/workbuddy/2026-06-26-23-06-20/mashr_eqtl/eqtl/mashr/mashr_Whole_Blood.db"
 NT_DB = r"E:/workbuddy/2026-06-23-05-43-40/mashr_extracted/eqtl/mashr/mashr_Nerve_Tibial.db"
 
@@ -51,7 +51,7 @@ for tbl in ("eqtlgen", "gtex_wb", "gtex_nt"):
     for (r,) in con.execute(f"SELECT DISTINCT rsid FROM {tbl}"):
         rs.add(r)
 print("distinct rsids across panels:", len(rs))
-open("scz_replication/_rdat_tmp/needed_rsids.txt", "w").write("\n".join(sorted(rs)))
+open("_DEPRECATED_scz_self_implemented/_rdat_tmp/needed_rsids.txt", "w").write("\n".join(sorted(rs)))
 
 con.commit(); con.close()
 print("weights.db built.")

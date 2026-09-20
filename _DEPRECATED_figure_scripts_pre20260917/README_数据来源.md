@@ -1,5 +1,12 @@
 # 图脚本与数据来源（2026-09-14）
 
+> 📌 **路径附注（2026-09-20 补记）**：本页正文按 2026-09-14 当时的目录名**原样保留**，以保全审计追溯链。
+> 其中一项已因改名失效：`scz_replication/results/scz_twas_results_limit0.csv` 现为
+> `_DEPRECATED_scz_self_implemented/results/scz_twas_results_limit0.csv`（2026-09-20 改名，该自实现管线已弃用，
+> 现行 SCZ 权威值为 `data/processed_officialZ/scz_z_4arm_official.csv`）。本页其余数据层路径
+> `data/processed/…` 同样属**修正前**世代，现行层为 `data/processed_officialZ/`。
+
+
 本目录下的 5 个脚本**均由数据实时计算**，不含数据型字面量（仅展示顺序、颜色等样式常量）。
 
 | 图 | 脚本 | 数据来源 |

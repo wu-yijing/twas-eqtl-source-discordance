@@ -20,7 +20,7 @@ import os, json
 import numpy as np, pandas as pd
 from scipy.stats import spearmanr, binomtest, norm
 
-SRC = r"E:\workbuddy\TWAS-eQTL-source-confounding\scz_replication\results\scz_twas_results_limit0.csv"
+SRC = r"E:\workbuddy\TWAS-eQTL-source-confounding\_DEPRECATED_scz_self_implemented\results\scz_twas_results_limit0.csv"
 OUT = r"E:\workbuddy\2026-09-10-18-23-32"
 B = 10000
 rng = np.random.default_rng(20260726)          # 沿用原脚本 seed，便于比对

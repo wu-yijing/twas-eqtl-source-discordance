@@ -7,7 +7,7 @@ import json
 from docx import Document
 from docx.oxml.ns import qn
 
-DECOMP = "scz_replication/_rdat_tmp/scz_decomp_limit0.json"
+DECOMP = "_DEPRECATED_scz_self_implemented/_rdat_tmp/scz_decomp_limit0.json"
 SRC_IN = "manuscript_iScience_v2.docx"
 SRC_OUT = "manuscript_iScience_v2.docx"   # overwrite in place
 SUB_OUT = "submission_iScience_v2/manuscript/manuscript_iScience_v2.docx"

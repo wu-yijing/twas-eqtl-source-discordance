@@ -12,9 +12,9 @@ import sqlite3, csv, json, math, random
 import numpy as np
 from scipy.stats import spearmanr
 
-DB   = "scz_replication/weights.db"
-CSV  = "scz_replication/_rdat_tmp/scz_twas_results_limit0.csv"
-OUT  = "scz_replication/_rdat_tmp/scz_robustness.json"
+DB   = "_DEPRECATED_scz_self_implemented/weights.db"
+CSV  = "_DEPRECATED_scz_self_implemented/_rdat_tmp/scz_twas_results_limit0.csv"
+OUT  = "_DEPRECATED_scz_self_implemented/_rdat_tmp/scz_robustness.json"
 
 def gtex_snp_counts(cur, tbl):
     d = {}

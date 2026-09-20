@@ -1,5 +1,15 @@
 # S1 cluster-robustness analysis — eQTL-source discordance in TWAS
 
+> ⚠️ **Superseded generation (2026-09-20).** Every number on this page was computed on the
+> **pre-correction** Z layer (`data/processed/`) and describes the v2.5.0-generation run — e.g.
+> 61/96 = 63.5% and ρ = 0.321, where the current manuscript has 66/96 = 68.8% and ρ = 0.39.
+> The cluster-aware procedures the manuscript now reports (naive t = 4.10, df 94, P = 8.8 × 10⁻⁵;
+> sandwich SE = 0.125; jackknife SE = 0.137; permutation P < 0.001; gene-cluster bootstrap ρ CI
+> 0.12–0.62 and direction consistency 58.3–79.2%) are in **Additional file 1: Table S16** and in the
+> repository README section *Cluster-Robustness Re-analysis of Direction Consistency (S1)*.
+> This directory is retained for provenance only; the code below is not the script set behind those
+> numbers and should not be used to reproduce them.
+
 Code and results for the gene-level **cluster-robust re-analysis of direction consistency**
 reported in the manuscript *"eQTL-source discordance in TWAS: a dual-source sensitivity
 analysis with true-negative calibration"*.
@@ -23,8 +33,8 @@ All inputs are the analysed output tables already archived in this Zenodo record
 | `data/processed/gtex_Nerve_Tibial_{DR,DN,DPN}.csv` | GTEx v8 MASHR tibial-nerve Z |
 | `data/processed/eqtlgen_spredixcan_harmonized_results.csv` | eQTLGen Z after three-way allele harmonisation (**use this file**) |
 | `data/processed/covariate_matrix.csv` | gene-group assignments (candidate / non-candidate / T2DM control) |
-| `scz_replication/results/scz_twas_results_limit0.csv` | genome-wide SCZ arm: 10,357 genes × 4 Z columns |
-| `scz_replication/results/scz_axis_difference.json` | reference values for the SCZ decomposition |
+| `_DEPRECATED_scz_self_implemented/results/scz_twas_results_limit0.csv` | genome-wide SCZ arm: 10,357 genes × 4 Z columns |
+| `_DEPRECATED_scz_self_implemented/results/scz_axis_difference.json` | reference values for the SCZ decomposition |
 
 > ⚠️ **Do not use `data/processed/eqtlgen_vs_gtex_comparison.csv`** for this analysis.
 > That file (dated 2026-09-02) predates the three-way allele harmonisation and its
@@ -132,7 +142,7 @@ against the reported 0.010, and the 95% CI widens by only 0.9 percentage points
   `statsmodels` is not used.
 - Random seeds: `numpy.random.default_rng(20260910)` for the HOTAIR arms
   (10,000 resamples); `numpy.random.default_rng(20260726)` for the SCZ arm, matching
-  the seed used in `scz_replication/scz_axis_difference_analysis.py`.
+  the seed used in `_DEPRECATED_scz_self_implemented/scz_axis_difference_analysis.py`.
 - Run order and working directory: place this directory alongside the repository root
   so that the relative `data/processed/…` paths resolve, then
 

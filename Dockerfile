@@ -12,7 +12,7 @@
 FROM continuumio/miniconda3:latest AS base
 
 LABEL maintainer="Yijing Wu <1045381056@qq.com>"
-LABEL description="TWAS eQTL source confounding reproducibility environment"
+LABEL description="eQTL-source discordance in TWAS — reproducibility environment (twas-eqtl-source-discordance)"
 LABEL version="1.0"
 
 # =============================================================================

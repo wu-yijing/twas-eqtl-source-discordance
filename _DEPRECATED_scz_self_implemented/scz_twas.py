@@ -1,13 +1,13 @@
 import sqlite3, gzip, sys, time, math
 import numpy as np
 
-WDB   = "scz_replication/weights.db"
+WDB   = "_DEPRECATED_scz_self_implemented/weights.db"
 BIM   = "E:/workbuddy/2026-06-24-05-57-20/tools/ldref/g1000_eur.bim"
 FAM   = "E:/workbuddy/2026-06-24-05-57-20/tools/ldref/g1000_eur.fam"
 BED   = "E:/workbuddy/2026-06-24-05-57-20/tools/ldref/g1000_eur.bed"
-SCZ   = "scz_replication/PGC3_SCZ_wave3.european.autosome.public.v3.vcf.tsv.gz"
-TARGET= "scz_replication/_rdat_tmp/target_genes.txt"
-NEED  = "scz_replication/_rdat_tmp/needed_rsids.txt"
+SCZ   = "_DEPRECATED_scz_self_implemented/PGC3_SCZ_wave3.european.autosome.public.v3.vcf.tsv.gz"
+TARGET= "_DEPRECATED_scz_self_implemented/_rdat_tmp/target_genes.txt"
+NEED  = "_DEPRECATED_scz_self_implemented/_rdat_tmp/needed_rsids.txt"
 LIMIT = int(sys.argv[1]) if len(sys.argv) > 1 else 0   # 0 = all
 
 RIDGE = 0.1   # regularization on LD correlation matrix
@@ -194,12 +194,12 @@ out = {
     "tissue_axis": {"rho": tis_r, "n": tis_n, "same_dir": tis_same,
                     "note": "GTEx Whole_Blood vs GTEx Nerve_Tibial"},
 }
-json.dump(out, open("scz_replication/_rdat_tmp/scz_decomp_limit%d.json" % LIMIT, "w"), indent=2)
+json.dump(out, open("_DEPRECATED_scz_self_implemented/_rdat_tmp/scz_decomp_limit%d.json" % LIMIT, "w"), indent=2)
 print("\nwrote scz_decomp_limit%d.json" % LIMIT, flush=True)
 
 # also persist per-gene Z for downstream analysis
 import csv as _csv
-with open("scz_replication/_rdat_tmp/scz_twas_results_limit%d.csv" % LIMIT, "w", newline="") as fh:
+with open("_DEPRECATED_scz_self_implemented/_rdat_tmp/scz_twas_results_limit%d.csv" % LIMIT, "w", newline="") as fh:
     wcsv = _csv.writer(fh)
     wcsv.writerow(["gene", "eqZ", "wbZ", "ntZ", "multiZ"])
     for i in range(len(res["gene"])):

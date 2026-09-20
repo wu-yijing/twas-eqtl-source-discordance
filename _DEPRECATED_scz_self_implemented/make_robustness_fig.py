@@ -4,9 +4,9 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-J = "scz_replication/_rdat_tmp/scz_robustness.json"
-out_png = "scz_replication/_rdat_tmp/Figure_S_robustness.png"
-out_pdf = "scz_replication/_rdat_tmp/Figure_S_robustness.pdf"
+J = "_DEPRECATED_scz_self_implemented/_rdat_tmp/scz_robustness.json"
+out_png = "_DEPRECATED_scz_self_implemented/_rdat_tmp/Figure_S_robustness.png"
+out_pdf = "_DEPRECATED_scz_self_implemented/_rdat_tmp/Figure_S_robustness.pdf"
 
 d = json.load(open(J))
 strata = d["stratified"]

@@ -19,7 +19,7 @@ import json, os
 
 REPO = r"E:/workbuddy/TWAS-eQTL-source-confounding"
 DATA = os.path.join(REPO, "data", "processed")
-SCZ = os.path.join(REPO, "scz_replication", "results")
+SCZ = os.path.join(REPO, "_DEPRECATED_scz_self_implemented", "results")
 
 # ============================================================
 # 1. Load primary comparison data
@@ -161,7 +161,7 @@ output = {
     'top_k_overlap_by_phenotype': pheno_topk,
     'fisher_z_ci': fisher_results,
     'direction_consistency_by_z_strata': dir_strata,
-    'note': 'Computed 2026-08-09 from data/processed/eqtlgen_vs_gtex_comparison.csv (primary, n=102) and scz_replication/results/*.json'
+    'note': 'Computed 2026-08-09 from data/processed/eqtlgen_vs_gtex_comparison.csv (primary, n=102) and _DEPRECATED_scz_self_implemented/results/*.json'
 }
 
 outpath = os.path.join(SCZ, "..", "m7_effect_size_supplement.json")

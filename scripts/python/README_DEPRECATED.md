@@ -21,7 +21,7 @@ They are retained for provenance only.
 | The paper's figures (Fig1–Fig8, FigS1–FigS6) | `figures/` |
 | Regenerating them | `figure_scripts_officialZ_20260917/` (start with `python paths_config.py`) |
 | Z-scores, denominators, cross-cohort values | `data/processed_officialZ/` (with `_PROVENANCE.json`) |
-| Genome-wide SCZ arm | `scz_replication/` + `scz_replication/results/` |
+| Genome-wide SCZ arm | `_DEPRECATED_scz_self_implemented/` + `_DEPRECATED_scz_self_implemented/results/` (superseded snapshot) |
 
 `run_all.sh` still invokes `scripts/python/04_generate_all_figures.py`; that container path
 reproduces the earlier pipeline and the environment, not the current figure set.

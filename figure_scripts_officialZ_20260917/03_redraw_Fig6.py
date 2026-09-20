@@ -15,9 +15,12 @@ AF = P.need(P.AF1, 'Additional file 1（从期刊补充材料下载后用 AF1_DO
 OUT = P.OUT_MAIN
 
 if not os.environ.get('FIG6_FROM_03'):
-    raise SystemExit('本脚本（Fig.6 第二版）已被 08_redraw_Fig6_labels_20260920.py 取代；\n'
-                     'Fig.6 的权威脚本是 08（含 SI Table S18 逐格回归断言）。\n'
-                     '如确需运行本旧版，设 FIG6_FROM_03=1。')
+    raise SystemExit(
+        '本脚本已被**整体取代**，因此不产生任何文件（唯一输出 Fig.6 已由 08 重新出具）。\n'
+        '  正确做法：python 08_redraw_Fig6_labels_20260920.py   ← 官方执行顺序第 6 步，含 SI Table S18 逐格回归断言\n'
+        '  被取代原因：本版 Fig.6 是 2026-09-17 之前的图形（ylim = 24、图例在绘图区内），与现行图件不一致。\n'
+        '  如确需运行本旧版（仅作对照）：设 FIG6_FROM_03=1 后再运行。\n'
+        '  （退出码 1 是设计如此，不是脚本坏了；详见本目录 README.md「已弃用」一节。）')
 
 BK = os.path.join(OUT, '_backup_before_officialZ_redraw_20260917')
 plt.rcParams.update({'font.family': 'DejaVu Sans', 'font.size': 7.5, 'axes.linewidth': 0.7,

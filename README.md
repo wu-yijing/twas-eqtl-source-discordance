@@ -73,7 +73,7 @@ A dual-source 2×2 decomposition was applied to schizophrenia (SCZ, PGC3 wave3 E
   - Both axes positive and comparable in magnitude — the axis ordering is **trait-dependent**, not a fixed "source always dominates" rule.
 - **Sparsity robustness**: GTEx v8 MASHR models are sparse (median 2 SNPs/gene). Stratifying by model size (2 / 3–4 / ≥5 SNPs) gave stable ρ (≈0.5 across strata) with bootstrap 95% CI excluding zero; the eQTLGen side (median 786 SNPs/gene) anchors the source axis. See `scz_replication/results/`.
 - **Scripts**: `scz_replication/scz_twas.py` (TWAS + decomposition), `scz_replication/build_weights_db.py` (weight DB), `scz_replication/robustness_scz.py` (stratified robustness), `scz_replication/make_figure9_scz.py` + `scz_replication/make_robustness_fig.py` (figures).
-- **Figures**: `figures/scz/Fig9_2x2_decomposition.*` (source/tissue scatter) and `figures/scz/FigS1_sparsity_robustness.*` (stratified robustness).
+- **Figures**: the SCZ arm is not part of the current figure set (`figures/`). The two SCZ figure scripts (`make_figure9_scz.py`, `make_robustness_fig.py`) are iScience-era leftovers that write to `submission_iScience_v2/figures/` and `scz_replication/_rdat_tmp/` — neither path is tracked here. The machine-readable SCZ results are in `scz_replication/results/`.
 
 ## Quick Start (Docker — Recommended)
 
@@ -88,6 +88,8 @@ docker run --rm -v $(pwd)/output:/app/output twas-eqtl-repro
 open output/figs/    # All figures in PDF + PNG
 open output/logs/    # Analysis provenance logs
 ```
+
+> ⚠️ **What the container actually runs.** `run_all.sh` executes the **early-generation** downstream scripts in `scripts/python/` (they write `figs/`, which is then copied to `output/`). The container therefore reproduces the environment and that earlier pipeline — **not** the current figure set. To regenerate `figures/` use `figure_scripts_officialZ_20260917/`; its step 00 needs Additional file 1 (the journal supplementary file, not distributed here), so it cannot run in the container without you supplying that file.
 
 ### What the Docker image contains
 - **Python 3.13 + R 4.5.2** with all dependencies (pandas, scipy, statsmodels, MatchIt, etc.)
@@ -125,74 +127,53 @@ docker run --rm \
 ## Repository Structure
 
 ```
-├── Dockerfile                     # Container definition
-├── environment.yml                # Conda environment (pinned)
-├── requirements.txt               # pip dependencies
-├── renv.lock                      # R environment lock
-├── run_all.sh                     # Main entry point (Docker CMD)
-├── run_spredixcan.sh              # S-PrediXcan execution reference
-├── .dockerignore                  # Docker build exclusions
+├── README.md                       # this file
+├── LICENSE (MIT)  .gitignore  .dockerignore  .zenodo.json
+├── Dockerfile  environment.yml  requirements.txt  renv.lock
+├── run_all.sh                      # pipeline entry point (Docker ENTRYPOINT)
+├── run_spredixcan.sh               # S-PrediXcan reference (needs external data)
+├── run_three_figs.py
+│
+├── figures/                        # CURRENT figure set — 43 files
+│                                   #   Fig1–Fig8 (main text) + FigS1–FigS6 (Additional file 1),
+│                                   #   each as PNG (600 dpi, RGB) + vector PDF + *_caption.txt
+├── figure_scripts_officialZ_20260917/   # CURRENT figure pipeline — reproduces figures/
+│   ├── paths_config.py             #   single path entry point (env-overridable)
+│   ├── 00…08, 10, 11 *.py          #   00 = data layer; 01/02/04/06/08/10 = figures; 05/07/11 = checks
+│   ├── m15_positive_control.json   #   input behind Fig. S6
+│   └── fig4_bootstrap_officialZ.json   # output of 06 (B = 5,000, seed 20260915)
+│
 ├── data/
-│   ├── raw/                       # (empty — raw data too large for repo)
-│   └── processed/                 # Intermediate results (CSV)
+│   ├── processed_officialZ/        # AUTHORITATIVE Z / denominator layer (built from Additional file 1)
+│   │   └── _PROVENANCE.json
+│   ├── processed/                  # early-generation intermediates — DEPRECATED for Z-based results
+│   │                               #   (file-level notices inside; see data/README.md)
+│   ├── hk_reselect_20260830/       # control-layer (housekeeping) selection data
+│   └── raw/                        # NOT tracked — raw public GWAS/eQTL data, too large for git
+│
 ├── scripts/
-│   ├── python/                    # Python analysis scripts
-│   └── R/                         # R scripts (Mahalanobis matching)
-├── figs/                          # Generated figures
-├── docs/                          # Documentation
-└── analyses/logs/                 # Provenance logs + SHA256 checksums
+│   ├── python/                     # EARLY-generation pipeline (provenance only)
+│   │                               #   reads data/processed/, writes figs/; superseded by
+│   │                               #   figure_scripts_officialZ_20260917/ — see its README_DEPRECATED.md
+│   └── R/run_mahalanobis_matching.R
+├── scz_replication/                # genome-wide PGC3 SCZ 2×2 arm — code + results/ (JSON + per-gene CSV)
+├── analyses/                       # control-layer scripts + logs/ (run provenance)
+├── tables/                         # exported table CSVs
+├── analysis_reports/               # dated audit notes (accession checks, provenance)
+│
+├── _DEPRECATED_figure_scripts_pre20260917/   # the five 2026-09-14-generation figure scripts
+└── _DEPRECATED_supplementary_old_numbering/  # pre-2026-09-15 supplementary scheme (FigureS1–FigureS8)
 ```
 
-```
-twas-eqtl-source-discordance/
-├── scripts/
-│   ├── python/
-│   │   ├── 01_visualize_mahalanobis_love_plot.py    # Love plot (covariate balance)
-│   │   ├── 02_density_scatter_consistency.py         # Density, scatter, bar charts
-│   │   ├── 03_enrichment_analysis.py                 # Enrichment + statistical tests
-│   │   ├── 04_generate_all_figures.py                # All main + supp figures
-│   │   ├── 05_generate_decision_framework.py         # Decision framework flowchart (Fig 6)
-│   │   ├── 06_generate_supplementary_figures.py      # Supplementary figures S5-S7
-│   │   ├── 07_generate_supplementary_tables.py       # Supplementary tables S4-S6
-│   │   ├── 08_generate_tables_S1_S2.py               # Supplementary tables S1-S2
-│   │   ├── m6_ne_weighted_sensitivity.py             # M6(b)/M6(d): sqrt(N_e)-weighted RNH1 DR merge sensitivity
-│   │   └── s1_cluster_robustness/                    # Gene-level cluster-robust re-analysis (S1)
-│   │       ├── s1_recon.py                           # Reconstruct analysis arms from raw tables
-│   │       ├── s1_diag.py                            # Diagnose NaN genes / cluster sizes
-│   │       ├── s1_fix.py                             # Confirm NaN genes, rebuild 96-pair arm
-│   │       ├── s1_cluster.py                         # ICC/DEFF, cluster-robust variance, bootstraps
-│   │       ├── s1_scz_cluster.py                     # Genome-wide SCZ arm re-analysis
-│   │       ├── s1_results.json                       # HOTAIR arms (machine-readable)
-│   │       ├── s1_scz_results.json                   # SCZ arm (machine-readable)
-│   │       ├── s1_primary_arm_96pairs.csv            # 96 primary-arm pairs (Z + direction)
-│   │       └── s1_anchor_102pairs.csv                # 102 anchor-set pairs
-│   └── R/
-│       └── (placeholder)                             # matchit R scripts
-├── data/
-│   ├── raw/                                          # (public data references only)
-│   └── processed/
-│       ├── eqtlgen_vs_gtex_comparison.csv            # GTEx vs eQTLGen Z-score pairs
-│       │                                             #   ⚠️ DEPRECATED for direction-consistency analyses:
-│       │                                             #   predates the three-way allele harmonisation, so its
-│       │                                             #   Same_Direction column reflects pre-harmonisation Z.
-│       │                                             #   Use eqtlgen_spredixcan_harmonized_results.csv instead.
-│       ├── eqtlgen_spredixcan_results.csv             # eQTLGen TWAS results (archived export; superseded — see harmonized file below)
-│       ├── eqtlgen_spredixcan_harmonized_results.csv  # eQTLGen TWAS results, three-way allele-harmonized recompute (current manuscript)
-│       ├── enrichment_comparison_harmonized.csv       # Stratum-wise enrichment rates (harmonized), Clopper–Pearson CIs
-│       ├── mahalanobis_matched_pairs.csv              # Mahalanobis matching pairs
-│       ├── enrichment_comparison.csv                  # Enrichment by group × phenotype × eQTL
-│       ├── covariate_matrix.csv                       # Gene-level covariates
-│       ├── layer_analysis.csv                         # Pull-down vs literature stratification
-│       ├── viz_z_distribution.csv                     # Z distribution data for viz
-│       └── candidate_comparison_DR.csv                # Candidate DR comparison data
-├── figs/                                              # Output figures (generated)
-├── docs/                          # Documentation
-├── environment.yml                                    # Conda environment
-├── requirements.txt                                   # Python dependencies
-├── .gitignore
-├── LICENSE (MIT)
-└── README.md
-```
+**Which part is current.** The paper's figures are `figures/`, and the only pipeline that reproduces
+them is `figure_scripts_officialZ_20260917/` (start with `python paths_config.py`, which prints every
+input and output path). The Z-scores, denominators and cross-cohort values are authoritative in
+`data/processed_officialZ/`. Older generations are kept for provenance and marked
+`_DEPRECATED_…`, `scripts/python/` (early-generation figure pipeline) or `data/processed/`
+(pre-correction intermediates) — none of them should be used to reproduce the paper.
+A directory named `figs/` is **not** part of the repository: `run_all.sh` creates it at run time as
+its figure output, then copies it (with logs and processed data) into `output/`. `docs/`,
+`manuscript/` and `figures/scz/`, which earlier versions of this README listed, do not exist.
 
 ## SCZ Replication Folder Layout
 
@@ -210,7 +191,7 @@ scz_replication/
     ├── scz_robustness.json     # stratified robustness + CI
     └── scz_twas_results_limit0.csv  # per-gene TWAS Z (10,357 genes)
 ```
-Manuscript and cover letter: `manuscript/`. SCZ figures: `figures/scz/`.
+The manuscript, cover letter and Additional file 1 are **not** part of this repository; the figure set that accompanies them is `figures/`. SCZ arm outputs: `scz_replication/results/`.
 
 > Large intermediates (`weights.db`, extracted eQTLGen RDat weights, raw GWAS) are excluded by `.gitignore`; regenerate via the scripts above.
 

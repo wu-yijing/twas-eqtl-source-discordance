@@ -165,7 +165,9 @@ docker run --rm \
 │   └── R/run_mahalanobis_matching.R
 ├── analyses/                       # control-layer scripts + logs/ (run provenance)
 ├── tables/                         # exported table CSVs
-├── analysis_reports/               # dated audit notes (accession checks, provenance)
+├── audit_notes/                    # dated audit notes shipped with the repo (figure set ↔ manuscript
+│                                   #   consistency, deprecation records) — see audit_notes/README.md
+│                                   #   NB: analysis_reports/ is a local-only working directory, not tracked
 │
 ├── _DEPRECATED_figure_scripts_pre20260917/   # the five 2026-09-14-generation figure scripts
 ├── _DEPRECATED_supplementary_old_numbering/  # pre-2026-09-15 supplementary scheme (FigureS1–FigureS8)
@@ -270,7 +272,7 @@ All GWAS and eQTL summary statistics used in this study are from **publicly avai
 | eQTLGen whole blood cis-eQTL | [eQTLGen](https://www.eqtlgen.org/) | Public access |
 | 1000 Genomes EUR LD | [1000 Genomes](https://www.internationalgenome.org/) | Public access |
 | UK Biobank DR (GCST90043640) | [IEU OpenGWAS](https://gwas.mrcieu.ac.uk/) | Public access |
-| ~~UK Biobank DR (Xue et al. 2022; ieu-b-4803, 14,147 cases/322,390 controls)~~ | ⚠️ **Withdrawn 2026-09-16** — this accession is not present in IEU OpenGWAS (verified against the full 50,057-dataset catalogue; the neighbouring IDs `ieu-b-4795`–`ieu-b-4807` are likewise absent), and no local or repository copy exists; the Z value formerly attributed to it had no traceable data or code. The real DR subset of that publication (PMID 35841873) is GCST90134546 (1,652 cases / 60,577 controls) and has no public summary statistics. **Replaced by the already-used UKB DR dataset GCST90043640 (308 cases / 456,040 controls, re-analysed with eQTLGen weights).** See `analysis_reports/数据集编号溯源_Xue2022_ieu-b-4803.md`. |
+| ~~UK Biobank DR (Xue et al. 2022; ieu-b-4803, 14,147 cases/322,390 controls)~~ | ⚠️ **Withdrawn 2026-09-16** — this accession is not present in IEU OpenGWAS (verified against the full 50,057-dataset catalogue; the neighbouring IDs `ieu-b-4795`–`ieu-b-4807` are likewise absent), and no local or repository copy exists; the Z value formerly attributed to it had no traceable data or code. The real DR subset of that publication (PMID 35841873) is GCST90134546 (1,652 cases / 60,577 controls) and has no public summary statistics. **Replaced by the already-used UKB DR dataset GCST90043640 (308 cases / 456,040 controls, re-analysed with eQTLGen weights).** See the audit note *数据集编号溯源_Xue2022_ieu-b-4803.md*, retained with the project's internal records and **not** distributed with this repository. |
 | Cai et al. 2026 UKB T2D-DR | (in preparation) | Apply to UKB |
 | Sakaue et al. 2021 DN (ebi-a-GCST90018832) | [IEU OpenGWAS](https://gwas.mrcieu.ac.uk/) | Public access |
 

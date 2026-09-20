@@ -5,9 +5,10 @@ import numpy as np
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+import paths_config as P  # 统一路径入口（2026-09-20）
 
-NEW = r"E:\workbuddy\TWAS-eQTL-source-confounding\data\processed_officialZ"
-OUT = r"E:\workbuddy\BMC Genomics投稿资料\定稿图集_Fig1-8_20260914"
+NEW = P.need(P.DATA_Z, '官方 MetaXcan Z 数据层')
+OUT = P.OUT_MAIN
 BK = os.path.join(OUT, '_backup_before_officialZ_redraw_20260917')
 os.makedirs(BK, exist_ok=True)
 
@@ -31,6 +32,12 @@ def save(fig, name):
         if os.path.exists(src) and not os.path.exists(os.path.join(BK, f'{name}.{ext}')):
             shutil.copy2(src, os.path.join(BK, f'{name}.{ext}'))
         fig.savefig(src, dpi=600)
+    # 2026-09-20：matplotlib 默认写 RGBA，而图集其余图为 RGB（评审 m-14），统一转 RGB。
+    from PIL import Image as _Image
+    _p = os.path.join(OUT, name + '.png')
+    _im = _Image.open(_p)
+    if _im.mode != 'RGB':
+        _im.convert('RGB').save(_p, dpi=(600, 600))
     plt.close(fig)
 
 # ================= Figure 5 =================
@@ -70,10 +77,10 @@ ymax = max(max(abs(r['ze']) for r in top), max((abs(r['zt']) for r in top if not
 ax.set_xlim(-ymax * 1.15, ymax * 1.15)
 for i, r in enumerate(top):
     ax.text(r['ze'] + (0.25 if r['ze'] > 0 else -0.25), y[i] - h / 2,
-            '%+.2f' % r['ze'], va='center', ha='left' if r['ze'] > 0 else 'right', fontsize=5.6)
+            '%+.2f' % r['ze'], va='center', ha='left' if r['ze'] > 0 else 'right', fontsize=6.2)
     if not np.isnan(r['zt']):
         ax.text(r['zt'] + (0.25 if r['zt'] > 0 else -0.25), y[i] + h / 2,
-                '%+.2f' % r['zt'], va='center', ha='left' if r['zt'] > 0 else 'right', fontsize=5.6)
+                '%+.2f' % r['zt'], va='center', ha='left' if r['zt'] > 0 else 'right', fontsize=6.2)
 fig.tight_layout(); save(fig, 'Fig5')
 print('Fig5 redrawn (official Z)')
 
@@ -85,13 +92,13 @@ print('\nFigure 7 panel (a) — 官方 Z: GTEx NT', np.round(gtex_z, 3), ' eQTLG
 # panel (b) 数值（与 Table S4 第 1 行一致，官方）
 zF, zU = 2.31, 0.72
 m = 1.515; se = 0.795; pi = (-0.33, 3.36)
-fig, (axa, axb) = plt.subplots(1, 2, figsize=(7.0, 2.9))
+fig, (axa, axb) = plt.subplots(1, 2, figsize=(6.65, 2.9))
 x = np.arange(3); w = 0.36
 axa.bar(x - w / 2, gtex_z, w, color=C_GTEX, edgecolor='black', lw=0.5, label='GTEx v8 Nerve_Tibial')
 axa.bar(x + w / 2, eqtl_z, w, color=C_EQTL, edgecolor='black', lw=0.5, label='eQTLGen whole blood')
 for i in range(3):
-    axa.text(x[i] - w / 2, gtex_z[i] + (0.08 if gtex_z[i] >= 0 else -0.30), '%+.2f' % gtex_z[i], ha='center', fontsize=5.8)
-    axa.text(x[i] + w / 2, eqtl_z[i] + (0.08 if eqtl_z[i] >= 0 else -0.30), '%+.2f' % eqtl_z[i], ha='center', fontsize=5.8)
+    axa.text(x[i] - w / 2, gtex_z[i] + (0.08 if gtex_z[i] >= 0 else -0.30), '%+.2f' % gtex_z[i], ha='center', fontsize=6.2)
+    axa.text(x[i] + w / 2, eqtl_z[i] + (0.08 if eqtl_z[i] >= 0 else -0.30), '%+.2f' % eqtl_z[i], ha='center', fontsize=6.2)
 axa.axhline(0, color='#333333', lw=0.7)
 axa.set_xticks(x); axa.set_xticklabels(PH)
 axa.set_ylabel('RNH1 S-PrediXcan Z')
@@ -108,8 +115,8 @@ axb.axvspan(pi[0], pi[1], color=C_POOL, alpha=0.10, zorder=1)
 axb.axvline(0, color='#333333', lw=0.7, ls='--')
 axb.set_yticks(ys); axb.set_yticklabels(labels, fontsize=6.6)
 axb.set_xlabel('RNH1 TWAS Z-score (DR, eQTLGen weights)')
-axb.text(m, ys[2] + 0.30, 'Z = %+.2f (SE %.2f)' % (m, se), ha='center', fontsize=5.8, color=C_POOL)
-axb.text(pi[1], -0.05, '95%% PI %+.2f to %+.2f' % pi, ha='right', fontsize=5.6, color=C_POOL)
+axb.text(m, ys[2] + 0.30, 'Z = %+.2f (SE %.2f)' % (m, se), ha='center', fontsize=6.2, color=C_POOL)
+axb.text(pi[1], -0.05, '95%% PI %+.2f to %+.2f' % pi, ha='right', fontsize=6.2, color=C_POOL)
 axb.set_ylim(-0.7, 2.6)
 axb.set_title('(b) Cross-cohort replication', fontsize=7.6, pad=4)
 fig.tight_layout(); save(fig, 'Fig7')

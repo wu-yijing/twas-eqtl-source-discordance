@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """P0 Step 8：重绘 Figure 4（轴分解）——(a) 三臂 ρ 用 Table 3b 官方值；(b) Δρ 用 45 基因共同宇宙 + 新算配对 bootstrap"""
+import paths_config as P  # 统一路径入口（2026-09-20）
 import os, csv, shutil, json
 import numpy as np
 from scipy import stats
@@ -7,8 +8,8 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
-NEW = r"E:\workbuddy\TWAS-eQTL-source-confounding\data\processed_officialZ"
-OUT = r"E:\workbuddy\BMC Genomics投稿资料\定稿图集_Fig1-8_20260914"
+NEW = P.need(P.DATA_Z, '官方 MetaXcan Z 数据层')
+OUT = P.OUT_MAIN
 BK = os.path.join(OUT, '_backup_before_officialZ_redraw_20260917')
 plt.rcParams.update({'font.family': 'DejaVu Sans', 'font.size': 7.5, 'axes.linewidth': 0.7,
                      'axes.spines.top': False, 'axes.spines.right': False,
@@ -62,9 +63,9 @@ print('bootstrap 结果:', json.dumps(res, ensure_ascii=False))
 print('稿件声称: dual-panel = -0.020, 95% CI -0.125 to +0.089, P = 0.74 ; dual-tissue = +0.033, 95% CI -0.217 to +0.274, P = 0.78')
 
 # ---- 出图 ----
-FULL = [('panel-only\n(GTEx Whole_Blood vs eQTLGen)', 0.4904, 0.4904, 0.21, 0.55, C_PAN),
-        ('tissue-only\n(GTEx Whole_Blood vs Nerve_Tibial)', 0.4138, 0.4138, 0.27, 0.54, C_TIS),
-        ('dual-mismatch\n(GTEx multi-tissue vs eQTLGen)', 0.4421, 0.4421, 0.32, 0.55, C_DUA)]
+FULL = [('panel-only\n(GTEx Whole_Blood\nvs eQTLGen)', 0.4904, 0.4904, 0.21, 0.55, C_PAN),
+        ('tissue-only\n(GTEx Whole_Blood\nvs Nerve_Tibial)', 0.4138, 0.4138, 0.27, 0.54, C_TIS),
+        ('dual-mismatch\n(GTEx multi-tissue\nvs eQTLGen)', 0.4421, 0.4421, 0.32, 0.55, C_DUA)]
 # 用 Fisher-z 精确重算 CI（full-pair 宇宙 n = 159 / 138 / 198）
 nn = [159, 138, 198]
 CIF = []
@@ -73,7 +74,7 @@ for r, n in zip([0.4904, 0.4138, 0.4421], nn):
     CIF.append((np.tanh(z - 1.96 * se), np.tanh(z + 1.96 * se)))
 print('Fisher-z CI:', [(round(a, 3), round(b, 3)) for a, b in CIF])
 
-fig, (axa, axb) = plt.subplots(1, 2, figsize=(7.0, 3.0),
+fig, (axa, axb) = plt.subplots(1, 2, figsize=(6.65, 3.0),
                                gridspec_kw={'width_ratios': [1.0, 1.25]})
 xs = np.arange(3)
 for i, ((lab, r, _, _, _, c), (lo, hi), n) in enumerate(zip(FULL, CIF, nn)):
@@ -103,7 +104,13 @@ for ext in ['png', 'pdf']:
         shutil.copy2(src, os.path.join(BK, f'Fig4.{ext}'))
     fig.savefig(src, dpi=600)
 plt.close(fig)
+# 2026-09-20：matplotlib 默认写 RGBA，而图集其余图为 RGB（评审 m-14），统一转 RGB。
+from PIL import Image as _Image
+_p = os.path.join(OUT, 'Fig4.png')
+_im = _Image.open(_p)
+if _im.mode != 'RGB':
+    _im.convert('RGB').save(_p, dpi=(600, 600))
 print('Fig4 redrawn')
-json.dump(res, open(r"E:\workbuddy\2026-09-17-20-59-12\_review\fig4_bootstrap_officialZ.json", 'w',
+json.dump(res, open(os.path.join(P.RES, 'fig4_bootstrap_officialZ.json'), 'w',
                     encoding='utf-8'), indent=1, ensure_ascii=False)
 print('backups:', sorted(os.listdir(BK)))

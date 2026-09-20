@@ -9,9 +9,16 @@ from docx.oxml.ns import qn
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+import paths_config as P  # 统一路径入口（2026-09-20）
 
-AF = r"E:\workbuddy\BMC Genomics投稿资料\定稿资料\Additional file 1.docx"
-OUT = r"E:\workbuddy\BMC Genomics投稿资料\定稿图集_Fig1-8_20260914"
+AF = P.need(P.AF1, 'Additional file 1（从期刊补充材料下载后用 AF1_DOCX 指定）')
+OUT = P.OUT_MAIN
+
+if not os.environ.get('FIG6_FROM_03'):
+    raise SystemExit('本脚本（Fig.6 第二版）已被 08_redraw_Fig6_labels_20260920.py 取代；\n'
+                     'Fig.6 的权威脚本是 08（含 SI Table S18 逐格回归断言）。\n'
+                     '如确需运行本旧版，设 FIG6_FROM_03=1。')
+
 BK = os.path.join(OUT, '_backup_before_officialZ_redraw_20260917')
 plt.rcParams.update({'font.family': 'DejaVu Sans', 'font.size': 7.5, 'axes.linewidth': 0.7,
                      'axes.spines.top': False, 'axes.spines.right': False,

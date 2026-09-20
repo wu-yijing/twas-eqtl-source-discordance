@@ -6,9 +6,10 @@ from scipy import stats
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+import paths_config as P  # 统一路径入口（2026-09-20）
 
-NEW = r"E:\workbuddy\TWAS-eQTL-source-confounding\data\processed_officialZ"
-OUT = r"E:\workbuddy\BMC Genomics投稿资料\定稿图集_Fig1-8_20260914"
+NEW = P.need(P.DATA_Z, '官方 MetaXcan Z 数据层')
+OUT = P.OUT_MAIN
 BK = os.path.join(OUT, '_backup_before_officialZ_redraw_20260917')
 os.makedirs(BK, exist_ok=True)
 plt.rcParams.update({'font.family': 'DejaVu Sans', 'font.size': 7.5, 'axes.linewidth': 0.7,
@@ -21,11 +22,23 @@ def rd(name):
     with open(os.path.join(NEW, name), encoding='utf-8-sig') as f:
         return list(csv.DictReader(f))
 def save(fig, name):
+    # 2026-09-20 拆分：Fig6 已由 08_redraw_Fig6_labels_20260920.py 接管，
+    # 本脚本的 Fig6 段是旧版（ylim=24、图例在内），重跑会覆盖正确版，故默认跳过。
+    if name == 'Fig6' and not os.environ.get('FIG6_FROM_02'):
+        print('SKIP Fig6 —— 权威脚本是 08_redraw_Fig6_labels_20260920.py')
+        plt.close(fig)
+        return
     for ext in ['png', 'pdf']:
         src = os.path.join(OUT, f'{name}.{ext}')
         if os.path.exists(src) and not os.path.exists(os.path.join(BK, f'{name}.{ext}')):
             shutil.copy2(src, os.path.join(BK, f'{name}.{ext}'))
         fig.savefig(src, dpi=600)
+    # 2026-09-20：matplotlib 默认写 RGBA，而图集其余图为 RGB（评审 m-14），统一转 RGB。
+    from PIL import Image as _Image
+    _p = os.path.join(OUT, name + '.png')
+    _im = _Image.open(_p)
+    if _im.mode != 'RGB':
+        _im.convert('RGB').save(_p, dpi=(600, 600))
     plt.close(fig)
 f = lambda x: (float(x) if x not in (None, '', 'NA') else np.nan)
 
@@ -37,7 +50,7 @@ same = (zg > 0) == (ze > 0)
 rho, pnaive = stats.spearmanr(zg, ze)
 print('Fig3: n=%d consistency=%.1f%% rho=%.4f naiveP=%.2g max|Ze|=%.2f max|Zg|=%.2f'
       % (len(S12), 100 * same.mean(), rho, pnaive, np.abs(ze).max(), np.abs(zg).max()))
-fig, (axa, axb) = plt.subplots(1, 2, figsize=(7.0, 3.1))
+fig, (axa, axb) = plt.subplots(1, 2, figsize=(6.65, 3.1))
 cols = [C_GTEX if s else '#7F8C8D' for s in same]
 axa.scatter(zg, ze, s=14, c=cols, edgecolor='none', alpha=0.85, zorder=3)
 lim = max(np.abs(zg).max(), np.abs(ze).max()) * 1.18
@@ -57,9 +70,10 @@ for pc in bp['boxes']:
     pc.set_facecolor(C_GTEX); pc.set_alpha(0.35)
 for med in bp['medians']:
     med.set_color('#1A1A1A'); med.set_linewidth(1.1)
+axb.set_ylim(top=axb.get_ylim()[1] * 1.20)   # 顶部留白：避免 consistency 标注压到面板标题（2026-09-20）
 for i, t in enumerate(order):
-    axb.text(i, 1.05, 'consistency %.1f%%' % (100 * same[tr == t].mean()), ha='center', fontsize=5.9,
-             transform=axb.get_xaxis_transform())
+    axb.text(i, 0.965, 'consistency %.1f%%' % (100 * same[tr == t].mean()), ha='center', va='top',
+             fontsize=6.3, transform=axb.get_xaxis_transform())
 axb.axhline(0, color='#AAAAAA', lw=0.5)
 axb.set_xticks(range(3)); axb.set_xticklabels(order)
 axb.set_ylabel('GTEx v8 Whole_Blood Z')

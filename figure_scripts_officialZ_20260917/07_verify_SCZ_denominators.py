@@ -3,8 +3,9 @@
 import csv, os, shutil
 import numpy as np
 from scipy import stats
+import paths_config as P  # 统一路径入口（2026-09-20）
 
-SRC = r"E:\workbuddy\2026-09-16-21-51-32\t1_full\scz_z_4arm.csv"
+SRC = P.need(os.path.join(P.DATA_Z, 'scz_z_4arm_official.csv'), 'SCZ 四臂官方数据层')
 rows = list(csv.DictReader(open(SRC, encoding='utf-8-sig')))
 def arr(k):
     return np.array([float(r[k]) if r[k] not in ('', 'NA') else np.nan for r in rows])
@@ -40,6 +41,4 @@ s = ((eq > 0) == (wb > 0))
 print('\n经验零假设（panel-only, min|Z| < 0.5）: %d/%d = %.1f%%   <-- 稿件称 54.9%% (1,987/3,617)'
       % (s[m05].sum(), m05.sum(), 100 * s[m05].mean()))
 
-DST = r"E:\workbuddy\TWAS-eQTL-source-confounding\data\processed_officialZ\scz_z_4arm_official.csv"
-shutil.copy2(SRC, DST)
-print('\ncopied ->', DST, os.path.getsize(DST))
+print('\n（本脚本只读归档层 %s；旧版会从会话临时目录复制到此处，2026-09-20 起不再需要）' % SRC)

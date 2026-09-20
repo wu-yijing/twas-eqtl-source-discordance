@@ -22,9 +22,30 @@ By how much does the choice of eQTL weight source (GTEx v8 tissue-specific vs. e
 
 > **Terminology:** throughout this repository and the current manuscript, *eQTL-source discordance* denotes the systematic perturbation of TWAS gene-candidacy conclusions induced by the weight source when GWAS input and analytic pipeline are held fixed. It is operational and **not** a claim of confounding in the causal sense — the earlier releases of this archive were described with the latter term, which the manuscript no longer uses.
 
+### Figure set and figure scripts (current as of 2026-09-20)
+
+**`figures/`** holds the complete, finalized figure set of the manuscript — **Fig1–Fig8** (main text) and
+**FigS1–FigS6** (Additional file 1) — each as `PNG` (600 dpi, RGB) + `PDF` (vector) + a `*_caption.txt`.
+All 43 files are **byte-identical** to the submission set; the in-figure numbering follows the manuscript
+(no legacy `Figure1–Figure9` scheme). See `figures/README_figure_set.md`.
+
+**`figure_scripts_officialZ_20260917/`** is the **only** pipeline that reproduces those figures: it reads
+`data/processed_officialZ/` (official MetaXcan v0.8.1 Z recompute) and Additional file 1's tables.
+All paths go through `paths_config.py` — run `python paths_config.py` to print the resolved
+input/output paths, and override with `TWAS_REPO` / `TWAS_DATA_Z` / `FIG_OUT_MAIN` / `FIG_OUT_SUPP` /
+`AF1_DOCX` / `FIG_RESULTS`. **Additional file 1 is not distributed with this repository** (it is the
+journal's supplementary file); download it and point `AF1_DOCX` at it. See that directory's `README.md`.
+
+Two directories are **superseded and kept only for audit** — do not use them to reproduce the paper:
+
+| Directory | Why deprecated |
+|---|---|
+| `_DEPRECATED_figure_scripts_pre20260917/` | The five data-driven scripts of the 2026-09-14 generation. They read the **pre-correction** data layer `data/processed/` (missing the σᵢ expression-variance factor and with a PLINK 2-bit decoding defect), so they reproduce *retired* values — e.g. RNH1 DR Z = 13.318 vs 2.3064, TUBB = 48.516 vs 11.8932, CKAP4 = 4.7549 vs 0.9874 (×4–×6). |
+| `_DEPRECATED_supplementary_old_numbering/` | The pre-2026-09-15 supplementary-figure scheme (`FigureS1–FigureS8`), which does **not** correspond to the current Additional file 1 (Fig. S1–S6). Superseded by `figures/FigS1–FigS6`. |
+
 ### Key Findings
 
-> ⚠️ **Version note (2026-09-19).** The headline numbers in the table below predate the official-MetaXcan Z recompute now archived here (`data/processed_officialZ/`, added 2026-09-19). They describe the **v2.5.0 generation**; the recomputed figures for the current manuscript will be folded in with the next release. Until then treat `data/processed_officialZ/_PROVENANCE.json` and the files it records as authoritative for Z-scores, direction consistency and cross-cohort heterogeneity.
+> ⚠️ **Version note (2026-09-19, updated 2026-09-20).** The headline numbers in the table below predate the official-MetaXcan Z recompute archived here (`data/processed_officialZ/`). They describe the **v2.5.0 generation**. **The recomputed figure set has now been folded in (2026-09-20)**: `figures/` carries the current Fig1–Fig8 + FigS1–FigS6 produced by `figure_scripts_officialZ_20260917/` (see *Figure set and figure scripts* above). Treat `data/processed_officialZ/_PROVENANCE.json` and the files it records as authoritative for Z-scores, direction consistency and cross-cohort heterogeneity. On 2026-09-20 the two data-layer files `gtex_official_Z.csv` (FDR q columns, 217/222 rows) and `crosscohort_TableS4_official.csv` (pooled Z, Q, I², row labels) were also regenerated from Additional file 1 (Tables S2 and S4) after they were found to be one generation stale; figures are unaffected by that correction.
 
 > **Note (2026-09-09, harmonized recompute):** The table below reflects the **current manuscript version (BMC Genomics submission)**, in which all eQTLGen-arm values were recomputed after **three-way allele harmonization** (eQTLGen assessed/other alleles ↔ FinnGen R13 ref/alt ↔ 1000G EUR A2) using the official eQTLGen FDR < 0.05 weight catalogue. This supersedes both the v1.0.0 (iScience) pipeline values and the earlier archived eQTLGen export, which contained an allele-alignment defect (24.1% of Z-scores flipped sign after harmonization). FDR enrichment rates are computed by Benjamini–Hochberg correction within each group × phenotype × source stratum; 37 of the 104 testbed genes have no eQTLGen model in the official FDR < 0.05 catalogue and are disclosed in the manuscript Methods; of the 67 that do, 61 return a valid S-PrediXcan statistic and form the eQTLGen arm (Additional file 1: Table S10). See `data/processed/eqtlgen_spredixcan_harmonized_results.csv` (gene-level Z-scores) and `data/processed/enrichment_comparison_harmonized.csv` (stratum-wise enrichment rates with Clopper–Pearson CIs).
 

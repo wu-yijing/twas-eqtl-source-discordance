@@ -3,8 +3,9 @@
 import os, csv
 import numpy as np
 from scipy import stats
+import paths_config as P  # 统一路径入口（2026-09-20）
 
-NEW = r"E:\workbuddy\TWAS-eQTL-source-confounding\data\processed_officialZ"
+NEW = P.need(P.DATA_Z, '官方 MetaXcan Z 数据层')
 def rd(n):
     return list(csv.DictReader(open(os.path.join(NEW, n), encoding='utf-8-sig')))
 f = lambda x: (float(x) if x not in (None, '', 'NA') else np.nan)

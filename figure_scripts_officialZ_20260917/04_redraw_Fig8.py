@@ -9,10 +9,11 @@ from docx.oxml.ns import qn
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+import paths_config as P  # 统一路径入口（2026-09-20）
 
-AF = r"E:\workbuddy\BMC Genomics投稿资料\定稿资料\Additional file 1.docx"
-NEW = r"E:\workbuddy\TWAS-eQTL-source-confounding\data\processed_officialZ"
-OUT = r"E:\workbuddy\BMC Genomics投稿资料\定稿图集_Fig1-8_20260914"
+AF = P.need(P.AF1, 'Additional file 1（从期刊补充材料下载后用 AF1_DOCX 指定）')
+NEW = P.need(P.DATA_Z, '官方 MetaXcan Z 数据层')
+OUT = P.OUT_MAIN
 BK = os.path.join(OUT, '_backup_before_officialZ_redraw_20260917')
 os.makedirs(BK, exist_ok=True)
 plt.rcParams.update({'font.family': 'DejaVu Sans', 'font.size': 7.5, 'axes.linewidth': 0.7,
@@ -83,7 +84,8 @@ for i, (lab, r, n, lo, hi, c) in enumerate(panels):
     ax.text(i, hi + 0.03, '$\\rho$ = %+.2f\nn = %d' % (r, n), ha='center', fontsize=6.2)
 ax.set_xticks(xs); ax.set_xticklabels([p[0] for p in panels], fontsize=6.4)
 ax.set_ylabel("Spearman $\\rho$ (GTEx Whole_Blood vs Nerve_Tibial)")
-ax.set_ylim(0.30, 0.80)
+_hi = max(hi for _, _, _, _, hi, _ in panels)
+ax.set_ylim(0.30, max(0.80, _hi + 0.11))   # 留白：避免 rho/n 标注压到标题（2026-09-20）
 ax.axhline(0, color='#AAAAAA', lw=0.5)
 ax.set_title('Within-GTEx tissue-context comparison across three gene sets', fontsize=7.4, pad=5)
 fig.tight_layout()

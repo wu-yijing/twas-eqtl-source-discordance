@@ -8,9 +8,10 @@ import os, csv, json, shutil
 from docx import Document
 from docx.table import Table
 from docx.oxml.ns import qn
+import paths_config as P  # 统一路径入口（2026-09-20）
 
-AF = r"E:\workbuddy\BMC Genomics投稿资料\定稿资料\Additional file 1.docx"
-REPO = r"E:\workbuddy\TWAS-eQTL-source-confounding"
+AF = P.need(P.AF1, 'Additional file 1（从期刊补充材料下载后用 AF1_DOCX 指定）')
+REPO = P.REPO
 PROC = os.path.join(REPO, 'data', 'processed')
 NEW = os.path.join(REPO, 'data', 'processed_officialZ')
 os.makedirs(NEW, exist_ok=True)

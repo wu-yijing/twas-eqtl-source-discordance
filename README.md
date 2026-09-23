@@ -3,6 +3,20 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21238202.svg)](https://doi.org/10.5281/zenodo.21238202)
 
+> ## ⚠️ This repository is superseded (2026-09-23)
+>
+> The current code and processed data for this study live at
+> **https://github.com/wu-yijing/eqtl-source-discordance-audit** .
+>
+> **All figures, figure captions, table files and table legends have been removed from this
+> repository.** They belong to the manuscript and to *Additional file 1*, not to a code archive.
+> The directory `_DEPRECATED_supplementary_old_numbering/` was removed with them.
+>
+> Read the rest of this file as a **historical record of the state before 2026-09-23**: sections
+> describing `figures/`, `tables/` or the removed directory no longer resolve. Both `figures/` and
+> `tables/` are now `.gitignore`d, so re-running the figure pipeline cannot re-introduce manuscript
+> artwork into version control.
+
 ## Overview
 
 This repository contains analysis scripts and processed data for:
@@ -24,10 +38,10 @@ By how much does the choice of eQTL weight source (GTEx v8 tissue-specific vs. e
 
 ### Figure set and figure scripts (current as of 2026-09-20)
 
-**`figures/`** holds the complete, finalized figure set of the manuscript — **Fig1–Fig8** (main text) and
-**FigS1–FigS6** (Additional file 1) — each as `PNG` (600 dpi, RGB) + `PDF` (vector) + a `*_caption.txt`.
-All 43 files are **byte-identical** to the submission set; the in-figure numbering follows the manuscript
-(no legacy `Figure1–Figure9` scheme). See `figures/README_figure_set.md`.
+**`figures/` — removed on 2026-09-23.** It used to hold the finalized figure set of the manuscript
+(Fig. 1–8 and Fig. S1–S6, each as a 600-dpi RGB PNG, a vector PDF and a `*_caption.txt`; 43 files).
+Figure artwork is supplied with the manuscript and *Additional file 1*; the pipeline below regenerates
+it into a `.gitignore`d `figures/` at run time.
 
 **`figure_scripts_officialZ_20260917/`** is the **only** pipeline that reproduces those figures: it reads
 `data/processed_officialZ/` (official MetaXcan v0.8.1 Z recompute) and Additional file 1's tables.
@@ -41,7 +55,7 @@ Three directories are **superseded and kept only for audit** — do not use them
 | Directory | Why deprecated |
 |---|---|
 | `_DEPRECATED_figure_scripts_pre20260917/` | The five data-driven scripts of the 2026-09-14 generation. They read the **pre-correction** data layer `data/processed/` (missing the σᵢ expression-variance factor and with a PLINK 2-bit decoding defect), so they reproduce *retired* values — e.g. RNH1 DR Z = 13.318 vs 2.3064, TUBB = 48.516 vs 11.8932, CKAP4 = 4.7549 vs 0.9874 (×4–×6). |
-| `_DEPRECATED_supplementary_old_numbering/` | The pre-2026-09-15 supplementary-figure scheme (`FigureS1–FigureS8`), which does **not** correspond to the current Additional file 1 (Fig. S1–S6). Superseded by `figures/FigS1–FigS6`. |
+| ~~`_DEPRECATED_supplementary_old_numbering/`~~ | The pre-2026-09-15 supplementary-figure scheme (`FigureS1–FigureS8`). **Removed on 2026-09-23** together with the rest of the figure artwork. |
 | `_DEPRECATED_scz_self_implemented/` | The **in-house** SCZ TWAS estimator (Z = (w′R⁻¹z)/√(w′R⁻¹w)), renamed from `scz_replication/` on 2026-09-20. Its JSON/CSV results are the pre-correction snapshot (n = 2,511), not the manuscript's values; the current SCZ statistics come from the official MetaXcan v0.8.1 binary. See `_DEPRECATED_scz_self_implemented/README_DEPRECATED.md`. |
 
 ### Key Findings
@@ -80,7 +94,7 @@ A dual-source 2×2 decomposition was applied to schizophrenia (SCZ, PGC3 wave3 E
 - **Sparsity**: GTEx v8 MASHR models are sparse (median 2 model SNPs per gene, IQR 1–2) whereas the eQTLGen cis panel is dense, and the tissue-axis contrast is not framework-dependent (ρ = 0.525 under elastic net vs 0.499 under MASHR on the 4,098-gene four-way universe). Stratifying the SCZ contrast by GTEx model size does not establish sparsity as a sufficient explanation of the tissue axis (tissue-only minus dual, +0.54 percentage points, 95% CI −0.79 to +1.86, P = 0.43; Additional file 1: Table S15).
 - **⚠️ Archive note**: the JSONs in `_DEPRECATED_scz_self_implemented/results/` are the **earlier self-implemented-pipeline snapshot** (n = 2,511 complete-case; ρ = 0.522 for the source analogue and 0.509 for the tissue axis) and do **not** carry the current values — they are kept for provenance only. Authoritative current values: `data/processed_officialZ/scz_z_4arm_official.csv` together with Additional file 1 (Tables S15 and S16).
 - **Scripts** (all superseded — kept for audit): `_DEPRECATED_scz_self_implemented/scz_twas.py` (in-house TWAS + decomposition), `build_weights_db.py` (weight DB), `robustness_scz.py` (sparsity-stratified robustness), `scz_axis_difference_analysis.py` + `scz_threshold_calibration.py`, and the iScience-era figure scripts `make_figure9_scz.py` / `make_robustness_fig.py`.
-- **Figures**: the SCZ arm is not part of the current figure set (`figures/`). The two SCZ figure scripts (`make_figure9_scz.py`, `make_robustness_fig.py`) are iScience-era leftovers that write to `submission_iScience_v2/figures/` and `_DEPRECATED_scz_self_implemented/_rdat_tmp/` — neither path is tracked here. The machine-readable SCZ results of the current manuscript are in `data/processed_officialZ/scz_z_4arm_official.csv`; the superseded snapshot is in `_DEPRECATED_scz_self_implemented/results/`.
+- **Figures**: the SCZ arm is not part of the manuscript figure set (`figures/`, removed 2026-09-23). The two SCZ figure scripts (`make_figure9_scz.py`, `make_robustness_fig.py`) are iScience-era leftovers that write to `submission_iScience_v2/figures/` and `_DEPRECATED_scz_self_implemented/_rdat_tmp/` — neither path is tracked here. The machine-readable SCZ results of the current manuscript are in `data/processed_officialZ/scz_z_4arm_official.csv`; the superseded snapshot is in `_DEPRECATED_scz_self_implemented/results/`.
 
 ## Quick Start (Docker — Recommended)
 
@@ -141,10 +155,9 @@ docker run --rm \
 ├── run_spredixcan.sh               # S-PrediXcan reference (needs external data)
 ├── run_three_figs.py
 │
-├── figures/                        # CURRENT figure set — 43 files
-│                                   #   Fig1–Fig8 (main text) + FigS1–FigS6 (Additional file 1),
-│                                   #   each as PNG (600 dpi, RGB) + vector PDF + *_caption.txt
-├── figure_scripts_officialZ_20260917/   # CURRENT figure pipeline — reproduces figures/
+├── figures/                        # REMOVED 2026-09-23 — was the 43-file figure set; now gitignored
+│                                   #   (the pipeline recreates it locally at run time)
+├── figure_scripts_officialZ_20260917/   # CURRENT figure pipeline — writes a gitignored figures/ at run time
 │   ├── paths_config.py             #   single path entry point (env-overridable)
 │   ├── 00…08, 10, 11 *.py          #   00 = data layer; 01/02/04/06/08/10 = figures; 05/07/11 = checks
 │   ├── m15_positive_control.json   #   input behind Fig. S6
@@ -164,19 +177,19 @@ docker run --rm \
 │   │                               #   figure_scripts_officialZ_20260917/ — see its README_DEPRECATED.md
 │   └── R/run_mahalanobis_matching.R
 ├── analyses/                       # control-layer scripts + logs/ (run provenance)
-├── tables/                         # exported table CSVs
+├── tables/                         # REMOVED 2026-09-23 — exported table CSVs; now gitignored
 ├── audit_notes/                    # dated audit notes shipped with the repo (figure set ↔ manuscript
 │                                   #   consistency, deprecation records) — see audit_notes/README.md
 │                                   #   NB: analysis_reports/ is a local-only working directory, not tracked
 │
 ├── _DEPRECATED_figure_scripts_pre20260917/   # the five 2026-09-14-generation figure scripts
-├── _DEPRECATED_supplementary_old_numbering/  # pre-2026-09-15 supplementary scheme (FigureS1–FigureS8)
 └── _DEPRECATED_scz_self_implemented/         # in-house SCZ TWAS estimator (superseded by official MetaXcan v0.8.1)
 ```
 
-**Which part is current.** The paper's figures are `figures/`, and the only pipeline that reproduces
-them is `figure_scripts_officialZ_20260917/` (start with `python paths_config.py`, which prints every
-input and output path). The Z-scores, denominators and cross-cohort values are authoritative in
+**Which part is current.** The only pipeline that reproduces the manuscript figures is
+`figure_scripts_officialZ_20260917/` (start with `python paths_config.py`, which prints every
+input and output path); it writes them into a `.gitignore`d `figures/`, the files themselves having
+been removed on 2026-09-23. The Z-scores, denominators and cross-cohort values are authoritative in
 `data/processed_officialZ/`. Older generations are kept for provenance and marked
 `_DEPRECATED_…`, `scripts/python/` (early-generation figure pipeline), `_DEPRECATED_scz_self_implemented/` (in-house SCZ TWAS estimator) or `data/processed/`
 (pre-correction intermediates) — none of them should be used to reproduce the paper.
@@ -203,7 +216,7 @@ _DEPRECATED_scz_self_implemented/
     └── scz_twas_results_limit0.csv                       # per-gene TWAS Z of that earlier run
 ```
 
-The manuscript, cover letter and Additional file 1 are **not** part of this repository; the figure set that accompanies them is `figures/`. The current SCZ Z-matrix and denominators are `data/processed_officialZ/scz_z_4arm_official.csv`.
+The manuscript, cover letter and Additional file 1 are **not** part of this repository, and neither is any figure artwork (removed 2026-09-23). The current SCZ Z-matrix and denominators are `data/processed_officialZ/scz_z_4arm_official.csv`.
 
 > Large intermediates (`weights.db`, extracted eQTLGen RDat weights, raw GWAS) are excluded by `.gitignore`; regenerate via the scripts above.
 
